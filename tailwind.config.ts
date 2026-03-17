@@ -19,8 +19,8 @@ const config: Config = {
         border: { DEFAULT: "rgba(255,255,255,0.08)", 2: "rgba(255,255,255,0.14)" },
       },
       fontFamily: {
-        sans: ["Plus Jakarta Sans", "sans-serif"],
-        serif: ["Instrument Serif", "serif"],
+        sans: ["Inter", "sans-serif"],
+        serif: ["Playfair Display", "serif"],
       },
     },
   },

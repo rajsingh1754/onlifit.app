@@ -369,7 +369,7 @@ export default function SupportChat() {
           </svg>
         ) : (
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#0D0D0D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
         {!open && hasNewMessage && (
@@ -534,7 +534,7 @@ export default function SupportChat() {
                 className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center hover:bg-accent-dark transition-all disabled:opacity-30 flex-shrink-0"
               >
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-                  <path d="M22 2 11 13M22 2l-7 20-4-9-9-4z" stroke="#0D0D0D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M22 2 11 13M22 2l-7 20-4-9-9-4z" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>

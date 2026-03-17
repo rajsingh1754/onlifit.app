@@ -384,7 +384,7 @@ export default function TrainerDashboard() {
               {[
                 { label: "Active Clients", value: activeBookings.length, icon: "👥", accent: "text-accent", ring: "stroke-accent", max: 20 },
                 { label: "Total Earnings", value: totalEarnings, icon: "💰", accent: "text-accent", ring: "stroke-accent", prefix: "₹", max: 500000 },
-                { label: "Avg Rating", value: trainer.rating, icon: "⭐", accent: "text-gold", ring: "stroke-[#F5C842]", suffix: "/5", max: 5, raw: true },
+                { label: "Avg Rating", value: trainer.rating, icon: "⭐", accent: "text-gold", ring: "stroke-[#FBBF24]", suffix: "/5", max: 5, raw: true },
                 { label: "Total Sessions", value: totalSessions, icon: "🏋️", accent: "text-teal-400", ring: "stroke-teal-400", max: 500 },
               ].map((stat, i) => (
                 <div

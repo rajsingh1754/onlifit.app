@@ -9,15 +9,15 @@
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
-  background: #0D0D0D;
-  color: rgba(255,255,255,0.85);
+  background: #111827;
+  color: rgba(255,255,255,0.88);
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: #C8F135; border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: #3B82F6; border-radius: 2px; }
 
 @layer utilities {
   .text-balance { text-wrap: balance; }

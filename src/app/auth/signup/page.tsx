@@ -126,7 +126,7 @@ function SignupContent() {
                     </div>
                     <div>
                       <div className="font-bold text-white text-[15px]">I&apos;m a trainer</div>
-                      <div className="text-muted text-xs mt-0.5">Earn ₹25,000–40,000/month with Onlifit</div>
+                      <div className="text-muted text-xs mt-0.5">Earn ₹45,000–70,000/month with Onlifit</div>
                     </div>
                   </div>
                 </button>

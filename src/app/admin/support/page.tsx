@@ -16,7 +16,7 @@ interface Ticket {
 }
 
 const STATUS_STYLE: Record<string, string> = {
-  open: "bg-gold/10 text-gold", replied: "bg-accent/10 text-accent", closed: "bg-white/5 text-muted",
+  open: "bg-gold/10 text-gold", replied: "bg-accent/10 text-accent", closed: "bg-gray-50 text-muted",
 };
 
 export default function SupportPage() {
@@ -80,7 +80,7 @@ export default function SupportPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-serif text-3xl text-white mb-1">Support</h1>
+        <h1 className="font-serif text-3xl text-gray-900 mb-1">Support</h1>
         <p className="text-muted text-sm">{counts.open} open ticket{counts.open !== 1 ? "s" : ""}</p>
       </div>
 
@@ -91,7 +91,7 @@ export default function SupportPage() {
             key={f}
             onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all capitalize ${
-              filter === f ? "bg-accent text-bg" : "text-muted hover:text-white"
+              filter === f ? "bg-accent text-bg" : "text-muted hover:text-gray-900"
             }`}
           >
             {f} ({counts[f]})
@@ -100,15 +100,15 @@ export default function SupportPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-20 bg-card border border-border rounded-2xl">
+        <div className="text-center py-20 bg-white shadow-sm border border-gray-100 rounded-2xl">
           <p className="text-4xl mb-3">💬</p>
-          <p className="text-white font-semibold text-lg">No tickets</p>
+          <p className="text-gray-900 font-semibold text-lg">No tickets</p>
           <p className="text-muted text-sm mt-1">{filter === "all" ? "No support queries yet." : `No ${filter} tickets.`}</p>
         </div>
       ) : (
         <div className="space-y-4">
           {filtered.map((ticket) => (
-            <div key={ticket.id} className="bg-card border border-border rounded-2xl overflow-hidden">
+            <div key={ticket.id} className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
               <div className="p-6">
                 <div className="flex gap-4">
                   <div className="w-10 h-10 rounded-full bg-bg-3 border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -118,13 +118,13 @@ export default function SupportPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="text-white font-semibold">{ticket.profile?.full_name || "User"}</h3>
+                      <h3 className="text-gray-900 font-semibold">{ticket.profile?.full_name || "User"}</h3>
                       <span className="text-muted text-xs">{ticket.profile?.email}</span>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${STATUS_STYLE[ticket.status] || "bg-white/5 text-muted"}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${STATUS_STYLE[ticket.status] || "bg-gray-50 text-muted"}`}>
                         {ticket.status}
                       </span>
                     </div>
-                    <h4 className="text-white text-sm font-medium mb-1">{ticket.subject}</h4>
+                    <h4 className="text-gray-900 text-sm font-medium mb-1">{ticket.subject}</h4>
                     <p className="text-muted text-sm leading-relaxed mb-3">{ticket.message}</p>
                     <p className="text-muted text-[11px]">
                       {new Date(ticket.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
@@ -133,7 +133,7 @@ export default function SupportPage() {
                     {ticket.admin_reply && (
                       <div className="mt-3 p-3 bg-accent/5 border border-accent/10 rounded-lg">
                         <p className="text-accent text-[10px] font-bold uppercase tracking-wider mb-1">Your reply</p>
-                        <p className="text-white text-sm">{ticket.admin_reply}</p>
+                        <p className="text-gray-900 text-sm">{ticket.admin_reply}</p>
                       </div>
                     )}
 
@@ -145,7 +145,7 @@ export default function SupportPage() {
                           value={replyText[ticket.id] || ""}
                           onChange={(e) => setReplyText((p) => ({ ...p, [ticket.id]: e.target.value }))}
                           onKeyDown={(e) => e.key === "Enter" && handleReply(ticket.id)}
-                          className="flex-1 px-3 py-2 bg-bg-3 border border-border rounded-lg text-white text-sm placeholder:text-muted/50 focus:outline-none focus:border-accent/40"
+                          className="flex-1 px-3 py-2 bg-bg-3 border border-border rounded-lg text-gray-900 text-sm placeholder:text-muted/50 focus:outline-none focus:border-accent/40"
                         />
                         <button
                           onClick={() => handleReply(ticket.id)}
@@ -156,7 +156,7 @@ export default function SupportPage() {
                         </button>
                         <button
                           onClick={() => handleClose(ticket.id)}
-                          className="px-3 py-2 bg-white/5 text-muted rounded-lg text-xs font-semibold hover:bg-white/10 transition-all"
+                          className="px-3 py-2 bg-gray-50 text-muted rounded-lg text-xs font-semibold hover:bg-gray-100 transition-all"
                         >
                           Close
                         </button>

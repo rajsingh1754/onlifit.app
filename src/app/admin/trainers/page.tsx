@@ -104,7 +104,7 @@ export default function TrainersPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-serif text-3xl text-white mb-1">Trainers</h1>
+        <h1 className="font-serif text-3xl text-gray-900 mb-1">Trainers</h1>
         <p className="text-muted text-sm">{trainers.length} active trainer{trainers.length !== 1 ? "s" : ""}</p>
       </div>
 
@@ -115,7 +115,7 @@ export default function TrainersPage() {
           placeholder="Search by name or email…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="px-4 py-2.5 bg-card border border-border rounded-xl text-white text-sm placeholder:text-muted/50 focus:outline-none focus:border-accent/40 sm:w-72"
+          className="px-4 py-2.5 bg-white shadow-sm border border-gray-100 rounded-xl text-gray-900 text-sm placeholder:text-muted/50 focus:outline-none focus:border-accent/40 sm:w-72"
         />
         <div className="flex gap-1 bg-bg-2 rounded-xl p-1">
           {["all", "offline", "virtual", "elite"].map((p) => (
@@ -123,7 +123,7 @@ export default function TrainersPage() {
               key={p}
               onClick={() => setPlanFilter(p)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all capitalize ${
-                planFilter === p ? "bg-accent text-bg" : "text-muted hover:text-white"
+                planFilter === p ? "bg-accent text-bg" : "text-muted hover:text-gray-900"
               }`}
             >
               {p === "all" ? "All" : PLAN_LABEL[p]}
@@ -133,15 +133,15 @@ export default function TrainersPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-20 bg-card border border-border rounded-2xl">
+        <div className="text-center py-20 bg-white shadow-sm border border-gray-100 rounded-2xl">
           <p className="text-4xl mb-3">💪</p>
-          <p className="text-white font-semibold text-lg">No trainers found</p>
+          <p className="text-gray-900 font-semibold text-lg">No trainers found</p>
           <p className="text-muted text-sm mt-1">{search ? "Try a different search term." : "No active trainers yet."}</p>
         </div>
       ) : (
         <div className="grid gap-4">
           {filtered.map((t) => (
-            <div key={t.id} className="bg-card border border-border rounded-2xl p-5 hover:border-white/10 transition-all">
+            <div key={t.id} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5 hover:border-white/10 transition-all">
               <div className="flex flex-col sm:flex-row gap-5">
                 {/* Avatar */}
                 <div className="w-14 h-14 rounded-full bg-bg-3 border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -153,7 +153,7 @@ export default function TrainersPage() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <Link href={`/admin/trainers/${t.id}`} className="text-white font-semibold text-lg hover:text-accent transition-colors">
+                    <Link href={`/admin/trainers/${t.id}`} className="text-gray-900 font-semibold text-lg hover:text-accent transition-colors">
                       {t.profile.full_name}
                     </Link>
                     {t.plan_types?.map((pt) => (
@@ -175,7 +175,7 @@ export default function TrainersPage() {
                   <div className="flex gap-4">
                     <div className="px-3 py-2 bg-bg-3/50 border border-border rounded-lg">
                       <p className="text-[10px] text-muted uppercase tracking-wider mb-0.5">This Month</p>
-                      <p className="text-white text-sm font-semibold">{t.monthlyBookings} booking{t.monthlyBookings !== 1 ? "s" : ""}</p>
+                      <p className="text-gray-900 text-sm font-semibold">{t.monthlyBookings} booking{t.monthlyBookings !== 1 ? "s" : ""}</p>
                     </div>
                     <div className="px-3 py-2 bg-bg-3/50 border border-border rounded-lg">
                       <p className="text-[10px] text-muted uppercase tracking-wider mb-0.5">Est. Earnings</p>

@@ -336,7 +336,7 @@ export default function SupportChat() {
         if (match.index > lastIdx) {
           elements.push(<span key={`${i}-${j}-pre`}>{line.slice(lastIdx, match.index)}</span>);
         }
-        elements.push(<strong key={`${i}-${j}-b`} className="text-white font-semibold">{match[1]}</strong>);
+        elements.push(<strong key={`${i}-${j}-b`} className="text-gray-900 font-semibold">{match[1]}</strong>);
         lastIdx = match.index + match[0].length;
         j++;
       }
@@ -359,7 +359,7 @@ export default function SupportChat() {
         onClick={() => setOpen(!open)}
         className={`fixed bottom-6 right-6 z-[100] w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 ${
           open
-            ? "bg-white/10 backdrop-blur-xl border border-white/10"
+            ? "bg-gray-100 backdrop-blur-xl border border-white/10"
             : "bg-accent hover:bg-accent-dark shadow-accent/25"
         }`}
       >
@@ -369,7 +369,7 @@ export default function SupportChat() {
           </svg>
         ) : (
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
         {!open && hasNewMessage && (
@@ -380,7 +380,7 @@ export default function SupportChat() {
       {/* ─── Chat Panel ─── */}
       {open && (
         <div
-          className="fixed bottom-24 right-6 z-[100] w-[380px] max-w-[calc(100vw-3rem)] h-[560px] max-h-[calc(100vh-8rem)] rounded-2xl border border-border bg-bg/95 backdrop-blur-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden"
+          className="fixed bottom-24 right-6 z-[100] w-[380px] max-w-[calc(100vw-3rem)] h-[560px] max-h-[calc(100vh-8rem)] rounded-2xl border border-border bg-bg/95 backdrop-blur-2xl shadow-2xl shadow-gray-200/50 flex flex-col overflow-hidden"
           style={{ animation: "chatSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
         >
           {/* Header */}
@@ -390,7 +390,7 @@ export default function SupportChat() {
                 <span className="text-accent text-sm font-bold">AI</span>
               </div>
               <div className="flex-1">
-                <h3 className="text-white font-semibold text-sm">Onlifit Assistant</h3>
+                <h3 className="text-gray-900 font-semibold text-sm">Onlifit Assistant</h3>
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
                   <span className="text-muted text-[11px]">Always online</span>
@@ -403,7 +403,7 @@ export default function SupportChat() {
                   setInput("");
                 }}
                 title="Restart chat"
-                className="w-7 h-7 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors"
+                className="w-7 h-7 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
               >
                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
                   <path d="M1 4v6h6M23 20v-6h-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -412,7 +412,7 @@ export default function SupportChat() {
               </button>
               <button
                 onClick={() => setOpen(false)}
-                className="w-7 h-7 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors"
+                className="w-7 h-7 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
               >
                 <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
                   <path d="m6 9 6 6 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" />
@@ -428,7 +428,7 @@ export default function SupportChat() {
                 <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                   msg.role === "user"
                     ? "bg-accent text-bg rounded-br-md"
-                    : "bg-bg-3 border border-border text-white/80 rounded-bl-md"
+                    : "bg-bg-3 border border-border text-gray-900/80 rounded-bl-md"
                 }`}>
                   {msg.role === "bot" ? renderFormattedText(formatBotText(msg.text)) : msg.text}
                 </div>
@@ -464,7 +464,7 @@ export default function SupportChat() {
                       placeholder="Subject (e.g. Booking issue)"
                       value={escalationSubject}
                       onChange={(e) => setEscalationSubject(e.target.value)}
-                      className="w-full px-3 py-2 bg-bg border border-border rounded-lg text-white text-xs placeholder:text-muted/50 focus:outline-none focus:border-accent/30"
+                      className="w-full px-3 py-2 bg-bg border border-border rounded-lg text-gray-900 text-xs placeholder:text-muted/50 focus:outline-none focus:border-accent/30"
                       required
                     />
                     <textarea
@@ -472,14 +472,14 @@ export default function SupportChat() {
                       value={escalationMessage}
                       onChange={(e) => setEscalationMessage(e.target.value)}
                       rows={3}
-                      className="w-full px-3 py-2 bg-bg border border-border rounded-lg text-white text-xs placeholder:text-muted/50 focus:outline-none focus:border-accent/30 resize-none"
+                      className="w-full px-3 py-2 bg-bg border border-border rounded-lg text-gray-900 text-xs placeholder:text-muted/50 focus:outline-none focus:border-accent/30 resize-none"
                       required
                     />
                     <div className="flex gap-2">
                       <button
                         type="button"
                         onClick={() => setShowEscalation(false)}
-                        className="px-3 py-2 text-muted text-xs hover:text-white transition-colors"
+                        className="px-3 py-2 text-muted text-xs hover:text-gray-900 transition-colors"
                       >
                         Cancel
                       </button>
@@ -507,7 +507,7 @@ export default function SupportChat() {
                   <button
                     key={action.label}
                     onClick={() => handleSend(action.query)}
-                    className="px-3 py-1.5 bg-bg-3 border border-border rounded-full text-[11px] text-muted hover:text-white hover:border-border-2 transition-all"
+                    className="px-3 py-1.5 bg-bg-3 border border-border rounded-full text-[11px] text-muted hover:text-gray-900 hover:border-border-2 transition-all"
                   >
                     {action.label}
                   </button>
@@ -526,7 +526,7 @@ export default function SupportChat() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
                 placeholder="Ask me anything…"
-                className="flex-1 px-3.5 py-2.5 bg-bg-3 border border-border rounded-xl text-white text-sm placeholder:text-muted/50 focus:outline-none focus:border-accent/30 transition-colors"
+                className="flex-1 px-3.5 py-2.5 bg-bg-3 border border-border rounded-xl text-gray-900 text-sm placeholder:text-muted/50 focus:outline-none focus:border-accent/30 transition-colors"
               />
               <button
                 onClick={() => handleSend()}
@@ -534,7 +534,7 @@ export default function SupportChat() {
                 className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center hover:bg-accent-dark transition-all disabled:opacity-30 flex-shrink-0"
               >
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-                  <path d="M22 2 11 13M22 2l-7 20-4-9-9-4z" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M22 2 11 13M22 2l-7 20-4-9-9-4z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>

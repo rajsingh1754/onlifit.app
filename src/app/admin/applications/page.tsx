@@ -107,14 +107,14 @@ export default function ApplicationsPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-serif text-3xl text-white mb-1">Applications</h1>
+        <h1 className="font-serif text-3xl text-gray-900 mb-1">Applications</h1>
         <p className="text-muted text-sm">{apps.length} pending application{apps.length !== 1 ? "s" : ""} to review</p>
       </div>
 
       {apps.length === 0 ? (
-        <div className="text-center py-20 bg-card border border-border rounded-2xl">
+        <div className="text-center py-20 bg-white shadow-sm border border-gray-100 rounded-2xl">
           <p className="text-4xl mb-3">✓</p>
-          <p className="text-white font-semibold text-lg">All caught up!</p>
+          <p className="text-gray-900 font-semibold text-lg">All caught up!</p>
           <p className="text-muted text-sm mt-1">No pending applications right now.</p>
         </div>
       ) : (
@@ -123,11 +123,11 @@ export default function ApplicationsPage() {
             const isExpanded = expanded === app.id;
             const grouped = groupSlots(app.slots);
             return (
-              <div key={app.id} className="bg-card border border-border rounded-2xl overflow-hidden transition-all">
+              <div key={app.id} className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden transition-all">
                 {/* Summary row */}
                 <button
                   onClick={() => setExpanded(isExpanded ? null : app.id)}
-                  className="w-full px-6 py-5 flex items-center gap-4 text-left hover:bg-white/[0.02] transition-colors"
+                  className="w-full px-6 py-5 flex items-center gap-4 text-left hover:bg-gray-50 transition-colors"
                 >
                   <div className="w-14 h-14 rounded-full bg-bg-3 border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
                     {app.profile.avatar_url ? (
@@ -136,7 +136,7 @@ export default function ApplicationsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="text-white font-semibold text-lg">{app.profile.full_name}</h3>
+                      <h3 className="text-gray-900 font-semibold text-lg">{app.profile.full_name}</h3>
                       {app.plan_types?.map((pt) => (
                         <span key={pt} className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${PLAN_COLOR[pt] || "text-muted border-border"}`}>
                           {PLAN_LABEL[pt] || pt}
@@ -160,18 +160,18 @@ export default function ApplicationsPage() {
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <p className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-1">Phone</p>
-                        <p className="text-white text-sm">{app.profile.phone || "Not provided"}</p>
+                        <p className="text-gray-900 text-sm">{app.profile.phone || "Not provided"}</p>
                       </div>
                       <div>
                         <p className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-1">Cities</p>
-                        <p className="text-white text-sm">{app.cities?.join(", ") || "Not specified"}</p>
+                        <p className="text-gray-900 text-sm">{app.cities?.join(", ") || "Not specified"}</p>
                       </div>
                     </div>
 
                     {/* Bio */}
                     <div>
                       <p className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-2">Bio</p>
-                      <p className="text-white/80 text-sm leading-relaxed bg-bg-3/50 rounded-xl p-4 border border-border">{app.bio || "No bio provided."}</p>
+                      <p className="text-gray-900/80 text-sm leading-relaxed bg-bg-3/50 rounded-xl p-4 border border-border">{app.bio || "No bio provided."}</p>
                     </div>
 
                     {/* Specializations */}
@@ -179,7 +179,7 @@ export default function ApplicationsPage() {
                       <p className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-2">Specializations</p>
                       <div className="flex flex-wrap gap-1.5">
                         {app.specializations?.length > 0 ? app.specializations.map((s) => (
-                          <span key={s} className="px-3 py-1 bg-bg-3 border border-border rounded-lg text-xs text-white">{s}</span>
+                          <span key={s} className="px-3 py-1 bg-bg-3 border border-border rounded-lg text-xs text-gray-900">{s}</span>
                         )) : <span className="text-muted text-xs">None listed</span>}
                       </div>
                     </div>
@@ -201,7 +201,7 @@ export default function ApplicationsPage() {
                         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
                           {Object.entries(grouped).map(([day, times]) => (
                             <div key={day} className="bg-bg-3/50 border border-border rounded-lg p-3">
-                              <p className="text-white text-xs font-semibold mb-1.5">{DAY_SHORT[day] || day}</p>
+                              <p className="text-gray-900 text-xs font-semibold mb-1.5">{DAY_SHORT[day] || day}</p>
                               <div className="flex flex-wrap gap-1">
                                 {times.map((t) => (
                                   <span key={t} className="px-2 py-0.5 bg-accent/10 text-accent text-[10px] font-medium rounded">{t}</span>

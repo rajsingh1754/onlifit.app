@@ -62,13 +62,13 @@ function SignupContent() {
     <div className="min-h-screen flex items-center justify-center px-5">
       <div className="w-full max-w-[420px]">
         <Link href="/" className="block text-center mb-10">
-          <span className="font-serif text-3xl text-white">
+          <span className="font-serif text-3xl text-gray-900">
             Onli<em className="text-accent italic">fit</em>
           </span>
         </Link>
 
-        <div className="bg-card border border-border rounded-2xl p-8">
-          <h1 className="font-serif text-3xl text-white mb-2">Join Onlifit</h1>
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-8">
+          <h1 className="font-serif text-3xl text-gray-900 mb-2">Join Onlifit</h1>
           <p className="text-muted text-sm mb-6">Create your account to find a trainer and start training</p>
 
           {error && (
@@ -85,7 +85,7 @@ function SignupContent() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Your full name"
-                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-white text-[15px] outline-none focus:border-accent/40 placeholder:text-white/20 transition-colors"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-gray-900 text-[15px] outline-none focus:border-accent/40 placeholder:text-gray-900/20 transition-colors"
                 required
               />
             </div>
@@ -96,7 +96,7 @@ function SignupContent() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-white text-[15px] outline-none focus:border-accent/40 placeholder:text-white/20 transition-colors"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-gray-900 text-[15px] outline-none focus:border-accent/40 placeholder:text-gray-900/20 transition-colors"
                 required
               />
             </div>
@@ -107,7 +107,7 @@ function SignupContent() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Min 6 characters"
-                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-white text-[15px] outline-none focus:border-accent/40 placeholder:text-white/20 transition-colors"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-gray-900 text-[15px] outline-none focus:border-accent/40 placeholder:text-gray-900/20 transition-colors"
                 required
                 minLength={6}
               />
@@ -119,7 +119,7 @@ function SignupContent() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-white text-[15px] outline-none focus:border-accent/40 placeholder:text-white/20 transition-colors"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-gray-900 text-[15px] outline-none focus:border-accent/40 placeholder:text-gray-900/20 transition-colors"
                 required
               />
             </div>
@@ -128,7 +128,7 @@ function SignupContent() {
               <select
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-white text-[15px] outline-none focus:border-accent/40 transition-colors appearance-none"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/10 rounded-lg text-gray-900 text-[15px] outline-none focus:border-accent/40 transition-colors appearance-none"
                 required
               >
                 <option value="" disabled className="bg-bg-3">Select your city</option>

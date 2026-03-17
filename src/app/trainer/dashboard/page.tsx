@@ -42,7 +42,7 @@ const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string }> =
   active: { bg: "bg-accent/10", text: "text-accent", dot: "bg-accent" },
   confirmed: { bg: "bg-teal-500/10", text: "text-teal-400", dot: "bg-teal-400" },
   pending: { bg: "bg-gold/10", text: "text-gold", dot: "bg-gold" },
-  completed: { bg: "bg-white/5", text: "text-muted", dot: "bg-white/30" },
+  completed: { bg: "bg-gray-50", text: "text-muted", dot: "bg-white/30" },
   cancelled: { bg: "bg-red-500/10", text: "text-red-400", dot: "bg-red-400" },
 };
 
@@ -141,7 +141,7 @@ function ProgressRing({ percent, size = 56, stroke = 4, accentClass = "stroke-ac
   useEffect(() => { setMounted(true); }, []);
   return (
     <svg width={size} height={size} className="transform -rotate-90">
-      <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={stroke} />
+      <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth={stroke} />
       <circle cx={size / 2} cy={size / 2} r={radius} fill="none" className={accentClass} strokeWidth={stroke} strokeLinecap="round"
         strokeDasharray={circ} strokeDashoffset={mounted ? offset : circ}
         style={{ transition: "stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)" }}
@@ -172,7 +172,7 @@ function Stars({ rating, size = "text-sm" }: { rating: number; size?: string }) 
   return (
     <span className={`${size} inline-flex gap-0.5`}>
       {[1, 2, 3, 4, 5].map((s) => (
-        <span key={s} className={s <= Math.round(rating) ? "text-gold" : "text-white/10"}>★</span>
+        <span key={s} className={s <= Math.round(rating) ? "text-gold" : "text-gray-900/10"}>★</span>
       ))}
     </span>
   );
@@ -303,7 +303,7 @@ export default function TrainerDashboard() {
           <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
             <span className="text-2xl">🏋️</span>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-3">No Trainer Profile Found</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">No Trainer Profile Found</h2>
           <p className="text-muted mb-6">You haven&apos;t applied as a trainer yet. Join Onlifit and start your training journey.</p>
           <Link href="/trainer/apply?ref=home" className="px-6 py-3 bg-accent rounded-lg text-bg font-bold hover:bg-accent-dark transition-all">
             Apply as Trainer
@@ -327,7 +327,7 @@ export default function TrainerDashboard() {
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-bg/80 border-b border-border">
         <div className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-xl font-bold text-white">Onlifit</Link>
+            <Link href="/" className="text-xl font-bold text-gray-900">Onlifit</Link>
             <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${PLAN_BG[planType]}`}>
               {PLAN_LABEL[planType]} Trainer
             </span>
@@ -338,8 +338,8 @@ export default function TrainerDashboard() {
             )}
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="text-sm text-muted hover:text-white transition-colors">User Dashboard</Link>
-            <button onClick={handleSignOut} className="text-sm text-muted hover:text-white transition-colors">
+            <Link href="/dashboard" className="text-sm text-muted hover:text-gray-900 transition-colors">User Dashboard</Link>
+            <button onClick={handleSignOut} className="text-sm text-muted hover:text-gray-900 transition-colors">
               Sign out
             </button>
           </div>
@@ -349,7 +349,7 @@ export default function TrainerDashboard() {
       <div className="max-w-7xl mx-auto px-5 py-8">
         {/* ─── Greeting ─── */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-1">
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">
             {greeting}, <span className={PLAN_ACCENT[planType]}>{profile?.full_name?.split(" ")[0] || "Trainer"}</span>
           </h1>
           <p className="text-muted text-sm">Here&apos;s your training business at a glance</p>
@@ -362,14 +362,14 @@ export default function TrainerDashboard() {
               key={t.key}
               onClick={() => setTab(t.key)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
-                tab === t.key ? "bg-white text-bg shadow-sm" : "text-muted hover:text-white"
+                tab === t.key ? "bg-white text-bg shadow-sm" : "text-muted hover:text-gray-900"
               }`}
             >
               <span>{t.icon}</span>
               {t.label}
               {t.count !== undefined && t.count > 0 && (
                 <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
-                  tab === t.key ? "bg-bg text-white" : "bg-white/10 text-white/60"
+                  tab === t.key ? "bg-bg text-gray-900" : "bg-gray-100 text-gray-900/60"
                 }`}>{t.count}</span>
               )}
             </button>
@@ -389,7 +389,7 @@ export default function TrainerDashboard() {
               ].map((stat, i) => (
                 <div
                   key={stat.label}
-                  className="bg-card border border-border rounded-2xl p-5 hover:border-border-2 transition-all group"
+                  className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5 hover:border-border-2 transition-all group"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -418,7 +418,7 @@ export default function TrainerDashboard() {
                       <span className="text-3xl">🏋️</span>
                     )}
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-1">{profile?.full_name}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">{profile?.full_name}</h3>
                   <p className={`text-sm font-semibold ${PLAN_ACCENT[planType]} mb-3`}>{PLAN_LABEL[planType]} Trainer</p>
                   <div className="flex items-center gap-1 mb-4">
                     <Stars rating={trainer.rating} />
@@ -426,16 +426,16 @@ export default function TrainerDashboard() {
                   </div>
                   <div className="flex flex-wrap gap-1.5 justify-center mb-4">
                     {trainer.specializations.map((s) => (
-                      <span key={s} className="text-[10px] font-semibold px-2 py-1 rounded-full bg-white/5 text-muted">{s}</span>
+                      <span key={s} className="text-[10px] font-semibold px-2 py-1 rounded-full bg-gray-50 text-muted">{s}</span>
                     ))}
                   </div>
                   <div className="grid grid-cols-2 gap-3 w-full mt-2">
                     <div className="bg-bg/40 rounded-xl p-3">
-                      <p className="text-lg font-bold text-white">{trainer.experience_years}</p>
+                      <p className="text-lg font-bold text-gray-900">{trainer.experience_years}</p>
                       <p className="text-[10px] text-muted">Yrs Exp</p>
                     </div>
                     <div className="bg-bg/40 rounded-xl p-3">
-                      <p className="text-lg font-bold text-white">{trainer.cities.join(", ")}</p>
+                      <p className="text-lg font-bold text-gray-900">{trainer.cities.join(", ")}</p>
                       <p className="text-[10px] text-muted">City</p>
                     </div>
                   </div>
@@ -443,8 +443,8 @@ export default function TrainerDashboard() {
               </div>
 
               {/* Recent Clients */}
-              <div className="lg:col-span-2 bg-card border border-border rounded-2xl p-6">
-                <h3 className="text-sm font-bold text-white mb-4">Recent Clients</h3>
+              <div className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
+                <h3 className="text-sm font-bold text-gray-900 mb-4">Recent Clients</h3>
                 {activeBookings.length === 0 ? (
                   <div className="text-center py-10">
                     <p className="text-muted text-sm">No active clients yet</p>
@@ -465,7 +465,7 @@ export default function TrainerDashboard() {
                               )}
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-white">{b.profile.full_name}</p>
+                              <p className="text-sm font-semibold text-gray-900">{b.profile.full_name}</p>
                               <p className="text-xs text-muted">
                                 {b.duration_months}mo · {b.booked_slot ? `🕐 ${formatSlotLabel(b.booked_slot)}` : TIME_LABELS[b.time_preference]?.label || b.time_preference}
                               </p>
@@ -487,8 +487,8 @@ export default function TrainerDashboard() {
 
             {/* Latest Reviews */}
             {reviews.length > 0 && (
-              <div className="bg-card border border-border rounded-2xl p-6">
-                <h3 className="text-sm font-bold text-white mb-4">Latest Reviews</h3>
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
+                <h3 className="text-sm font-bold text-gray-900 mb-4">Latest Reviews</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {reviews.slice(0, 3).map((r) => (
                     <div key={r.id} className="bg-bg-2 border border-border rounded-xl p-4">
@@ -501,7 +501,7 @@ export default function TrainerDashboard() {
                           )}
                         </div>
                         <div>
-                          <p className="text-xs font-semibold text-white">{r.profile.full_name}</p>
+                          <p className="text-xs font-semibold text-gray-900">{r.profile.full_name}</p>
                           <Stars rating={r.rating} size="text-xs" />
                         </div>
                       </div>
@@ -518,14 +518,14 @@ export default function TrainerDashboard() {
         {tab === "clients" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-lg font-bold text-white">Your Clients</h2>
+              <h2 className="text-lg font-bold text-gray-900">Your Clients</h2>
               <span className="text-xs text-muted">{bookings.length} total bookings</span>
             </div>
 
             {bookings.length === 0 ? (
-              <div className="bg-card border border-border rounded-2xl p-12 text-center">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-12 text-center">
                 <span className="text-4xl mb-4 block">👥</span>
-                <h3 className="text-lg font-bold text-white mb-2">No clients yet</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">No clients yet</h3>
                 <p className="text-muted text-sm">Once users book your training, they&apos;ll appear here.</p>
               </div>
             ) : (
@@ -533,7 +533,7 @@ export default function TrainerDashboard() {
                 {bookings.map((b) => {
                   const sc = STATUS_CONFIG[b.status] || STATUS_CONFIG.pending;
                   return (
-                    <div key={b.id} className="bg-card border border-border rounded-2xl p-5 hover:border-border-2 transition-all">
+                    <div key={b.id} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5 hover:border-border-2 transition-all">
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-full bg-bg-3 border border-border flex items-center justify-center overflow-hidden">
@@ -544,7 +544,7 @@ export default function TrainerDashboard() {
                             )}
                           </div>
                           <div>
-                            <p className="text-base font-bold text-white">{b.profile.full_name}</p>
+                            <p className="text-base font-bold text-gray-900">{b.profile.full_name}</p>
                             <p className="text-xs text-muted">{b.profile.email}</p>
                             {b.profile.phone && <p className="text-xs text-muted">{b.profile.phone}</p>}
                           </div>
@@ -557,21 +557,21 @@ export default function TrainerDashboard() {
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 pt-4 border-t border-border">
                         <div>
                           <p className="text-[10px] text-muted uppercase tracking-wider">Plan</p>
-                          <p className={`text-sm font-semibold ${PLAN_ACCENT[b.plan.slug] || "text-white"}`}>{b.plan.name}</p>
+                          <p className={`text-sm font-semibold ${PLAN_ACCENT[b.plan.slug] || "text-gray-900"}`}>{b.plan.name}</p>
                         </div>
                         <div>
                           <p className="text-[10px] text-muted uppercase tracking-wider">Duration</p>
-                          <p className="text-sm font-semibold text-white">{b.duration_months} month{b.duration_months > 1 ? "s" : ""}</p>
+                          <p className="text-sm font-semibold text-gray-900">{b.duration_months} month{b.duration_months > 1 ? "s" : ""}</p>
                         </div>
                         <div>
                           <p className="text-[10px] text-muted uppercase tracking-wider">Time</p>
-                          <p className="text-sm font-semibold text-white">
+                          <p className="text-sm font-semibold text-gray-900">
                             {b.booked_slot ? `🕐 ${formatSlotLabel(b.booked_slot)}` : TIME_LABELS[b.time_preference]?.label || b.time_preference}
                           </p>
                         </div>
                         <div>
                           <p className="text-[10px] text-muted uppercase tracking-wider">Starts</p>
-                          <p className="text-sm font-semibold text-white">
+                          <p className="text-sm font-semibold text-gray-900">
                             {b.start_date ? new Date(b.start_date).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "TBD"}
                           </p>
                         </div>
@@ -589,21 +589,21 @@ export default function TrainerDashboard() {
           <div className="space-y-6">
             {/* Earnings Summary */}
             <div className="grid sm:grid-cols-3 gap-4">
-              <div className="bg-card border border-border rounded-2xl p-6">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
                 <p className="text-xs text-muted font-medium mb-1">Total Earnings</p>
                 <p className="text-3xl font-bold text-accent">
                   <AnimatedNumber value={totalEarnings} prefix="₹" />
                 </p>
                 <p className="text-xs text-muted mt-1">{bookings.filter((b) => ["active", "completed"].includes(b.status)).length} paid bookings</p>
               </div>
-              <div className="bg-card border border-border rounded-2xl p-6">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
                 <p className="text-xs text-muted font-medium mb-1">This Month</p>
                 <p className="text-3xl font-bold text-teal-400">
                   <AnimatedNumber value={thisMonthEarnings} prefix="₹" />
                 </p>
                 <p className="text-xs text-muted mt-1">{new Date().toLocaleDateString("en-IN", { month: "long", year: "numeric" })}</p>
               </div>
-              <div className="bg-card border border-border rounded-2xl p-6">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
                 <p className="text-xs text-muted font-medium mb-1">Per Client / Month</p>
                 <p className="text-3xl font-bold text-orange">
                   ₹{(TRAINER_EARNING[planType] || 5100).toLocaleString("en-IN")}
@@ -613,8 +613,8 @@ export default function TrainerDashboard() {
             </div>
 
             {/* Earnings Breakdown */}
-            <div className="bg-card border border-border rounded-2xl p-6">
-              <h3 className="text-sm font-bold text-white mb-4">Earnings Breakdown</h3>
+            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
+              <h3 className="text-sm font-bold text-gray-900 mb-4">Earnings Breakdown</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
@@ -634,7 +634,7 @@ export default function TrainerDashboard() {
                         return (
                           <tr key={b.id} className="border-b border-border/50">
                             <td className="py-3 pr-4">
-                              <p className="font-semibold text-white">{b.profile.full_name}</p>
+                              <p className="font-semibold text-gray-900">{b.profile.full_name}</p>
                             </td>
                             <td className="py-3 pr-4 text-muted">{b.duration_months} mo</td>
                             <td className="py-3 pr-4">
@@ -654,10 +654,10 @@ export default function TrainerDashboard() {
 
             {/* Payment Info */}
             <div className="bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/20 rounded-2xl p-6">
-              <h3 className="text-sm font-bold text-white mb-2">💡 How Payouts Work</h3>
+              <h3 className="text-sm font-bold text-gray-900 mb-2">💡 How Payouts Work</h3>
               <p className="text-xs text-muted leading-relaxed">
                 Earnings are calculated per client per month. As a <span className={`font-semibold ${PLAN_ACCENT[planType]}`}>{PLAN_LABEL[planType]}</span> trainer,
-                you earn <span className="font-bold text-white">₹{(TRAINER_EARNING[planType] || 5100).toLocaleString("en-IN")}</span> per client/month.
+                you earn <span className="font-bold text-gray-900">₹{(TRAINER_EARNING[planType] || 5100).toLocaleString("en-IN")}</span> per client/month.
                 {planType === "offline" && " This includes ₹300 travel allowance."}
                 {" "}Payouts are processed monthly to your registered bank account.
               </p>
@@ -669,24 +669,24 @@ export default function TrainerDashboard() {
         {tab === "schedule" && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">Your Schedule</h2>
+              <h2 className="text-lg font-bold text-gray-900">Your Schedule</h2>
               <span className="text-xs text-muted">{slots.filter((s) => s.is_available).length} active slots</span>
             </div>
 
             {slots.length === 0 ? (
-              <div className="bg-card border border-border rounded-2xl p-12 text-center">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-12 text-center">
                 <span className="text-4xl mb-4 block">📅</span>
-                <h3 className="text-lg font-bold text-white mb-2">No schedule set</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">No schedule set</h3>
                 <p className="text-muted text-sm">Your availability slots will appear here once configured.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {scheduleByDay.map(({ day, label, slots: daySlots }) => (
-                  <div key={day} className="bg-card border border-border rounded-2xl p-4">
+                  <div key={day} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-sm font-bold text-white">{label}</h4>
+                      <h4 className="text-sm font-bold text-gray-900">{label}</h4>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        daySlots.length > 0 ? "bg-accent/10 text-accent" : "bg-white/5 text-muted"
+                        daySlots.length > 0 ? "bg-accent/10 text-accent" : "bg-gray-50 text-muted"
                       }`}>
                         {daySlots.length} slots
                       </span>
@@ -709,8 +709,8 @@ export default function TrainerDashboard() {
 
             {/* Active Clients Schedule */}
             {activeBookings.length > 0 && (
-              <div className="bg-card border border-border rounded-2xl p-6">
-                <h3 className="text-sm font-bold text-white mb-4">Client Preferences</h3>
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
+                <h3 className="text-sm font-bold text-gray-900 mb-4">Client Preferences</h3>
                 <div className="space-y-3">
                   {activeBookings.map((b) => (
                     <div key={b.id} className="flex items-center justify-between p-3 rounded-xl bg-bg-2 border border-border">
@@ -718,7 +718,7 @@ export default function TrainerDashboard() {
                         <div className="w-8 h-8 rounded-full bg-bg-3 flex items-center justify-center">
                           <span className="text-xs font-bold text-accent">{b.profile.full_name?.[0]}</span>
                         </div>
-                        <p className="text-sm font-semibold text-white">{b.profile.full_name}</p>
+                        <p className="text-sm font-semibold text-gray-900">{b.profile.full_name}</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-xs text-muted">
@@ -741,13 +741,13 @@ export default function TrainerDashboard() {
           <div className="space-y-6">
             {/* Rating Overview */}
             <div className="grid sm:grid-cols-2 gap-4">
-              <div className="bg-card border border-border rounded-2xl p-6 flex flex-col items-center justify-center">
-                <p className="text-5xl font-bold text-white mb-1">{trainer.rating}</p>
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 flex flex-col items-center justify-center">
+                <p className="text-5xl font-bold text-gray-900 mb-1">{trainer.rating}</p>
                 <Stars rating={trainer.rating} size="text-lg" />
                 <p className="text-xs text-muted mt-2">{trainer.total_reviews} review{trainer.total_reviews !== 1 ? "s" : ""}</p>
               </div>
-              <div className="bg-card border border-border rounded-2xl p-6">
-                <h4 className="text-sm font-bold text-white mb-3">Rating Distribution</h4>
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
+                <h4 className="text-sm font-bold text-gray-900 mb-3">Rating Distribution</h4>
                 <div className="space-y-2">
                   {ratingDist.map((rd) => (
                     <div key={rd.star} className="flex items-center gap-2">
@@ -765,15 +765,15 @@ export default function TrainerDashboard() {
 
             {/* All Reviews */}
             {reviews.length === 0 ? (
-              <div className="bg-card border border-border rounded-2xl p-12 text-center">
+              <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-12 text-center">
                 <span className="text-4xl mb-4 block">⭐</span>
-                <h3 className="text-lg font-bold text-white mb-2">No reviews yet</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">No reviews yet</h3>
                 <p className="text-muted text-sm">Reviews from your clients will appear here.</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {reviews.map((r) => (
-                  <div key={r.id} className="bg-card border border-border rounded-2xl p-5 hover:border-border-2 transition-all">
+                  <div key={r.id} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5 hover:border-border-2 transition-all">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-bg-3 border border-border flex items-center justify-center overflow-hidden">
@@ -784,7 +784,7 @@ export default function TrainerDashboard() {
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-white">{r.profile.full_name}</p>
+                          <p className="text-sm font-bold text-gray-900">{r.profile.full_name}</p>
                           <Stars rating={r.rating} size="text-xs" />
                         </div>
                       </div>

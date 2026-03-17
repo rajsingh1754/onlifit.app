@@ -15,7 +15,7 @@ const PLAN_COLOR: Record<string, string> = {
 const TRAINER_EARNING: Record<string, number> = { offline: 5100, virtual: 6000, elite: 11000 };
 const STATUS_STYLE: Record<string, string> = {
   active: "bg-accent/10 text-accent", confirmed: "bg-teal-500/10 text-teal-400",
-  pending: "bg-gold/10 text-gold", completed: "bg-white/5 text-muted", cancelled: "bg-red-500/10 text-red-400",
+  pending: "bg-gold/10 text-gold", completed: "bg-gray-50 text-muted", cancelled: "bg-red-500/10 text-red-400",
 };
 const DAYS_ORDER = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 const DAY_SHORT: Record<string, string> = {
@@ -179,7 +179,7 @@ export default function TrainerDetailPage() {
 
   if (!trainer || !profile) return (
     <div className="text-center py-32">
-      <p className="text-white text-lg font-semibold mb-2">Trainer not found</p>
+      <p className="text-gray-900 text-lg font-semibold mb-2">Trainer not found</p>
       <Link href="/admin/trainers" className="text-accent text-sm hover:underline">← Back to trainers</Link>
     </div>
   );
@@ -187,12 +187,12 @@ export default function TrainerDetailPage() {
   return (
     <div>
       {/* Back */}
-      <Link href="/admin/trainers" className="text-muted text-sm hover:text-white transition-colors mb-6 inline-flex items-center gap-1">
+      <Link href="/admin/trainers" className="text-muted text-sm hover:text-gray-900 transition-colors mb-6 inline-flex items-center gap-1">
         ← Back to trainers
       </Link>
 
       {/* Profile Header */}
-      <div className="bg-card border border-border rounded-2xl p-6 mb-6">
+      <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 mb-6">
         <div className="flex flex-col sm:flex-row gap-5">
           <div className="w-20 h-20 rounded-2xl bg-bg-3 border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
             {profile.avatar_url ? (
@@ -201,7 +201,7 @@ export default function TrainerDetailPage() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-2">
-              <h1 className="font-serif text-2xl text-white">{profile.full_name}</h1>
+              <h1 className="font-serif text-2xl text-gray-900">{profile.full_name}</h1>
               {trainer.plan_types?.map((pt) => (
                 <span key={pt} className={`px-2.5 py-0.5 rounded-md text-[10px] font-bold border ${PLAN_COLOR[pt] || "text-muted border-border"}`}>
                   {PLAN_LABEL[pt] || pt}
@@ -237,19 +237,19 @@ export default function TrainerDetailPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-card border border-border rounded-2xl p-5">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5">
           <p className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-2">Monthly Bookings</p>
-          <p className="font-serif text-2xl text-white">{monthBookings.length}</p>
+          <p className="font-serif text-2xl text-gray-900">{monthBookings.length}</p>
         </div>
-        <div className="bg-card border border-border rounded-2xl p-5">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5">
           <p className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-2">Active Clients</p>
           <p className="font-serif text-2xl text-teal-400">{activeClients}</p>
         </div>
-        <div className="bg-card border border-border rounded-2xl p-5">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5">
           <p className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-2">Monthly Earnings</p>
           <p className="font-serif text-2xl text-accent">₹{monthEarnings.toLocaleString("en-IN")}</p>
         </div>
-        <div className="bg-card border border-border rounded-2xl p-5">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5">
           <p className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-2">Rating</p>
           <p className="font-serif text-2xl text-gold">
             {trainer.rating > 0 ? `${trainer.rating} ⭐` : "—"}
@@ -265,7 +265,7 @@ export default function TrainerDetailPage() {
             key={t}
             onClick={() => setTab(t)}
             className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all capitalize ${
-              tab === t ? "bg-accent text-bg" : "text-muted hover:text-white"
+              tab === t ? "bg-accent text-bg" : "text-muted hover:text-gray-900"
             }`}
           >
             {t} {t === "clients" ? `(${bookings.length})` : t === "reviews" ? `(${reviews.length})` : ""}
@@ -277,24 +277,24 @@ export default function TrainerDetailPage() {
       {tab === "about" && (
         <div className="space-y-6">
           {/* Bio */}
-          <div className="bg-card border border-border rounded-2xl p-6">
+          <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
             <h3 className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-3">Bio</h3>
-            <p className="text-white/80 text-sm leading-relaxed">{trainer.bio || "No bio provided."}</p>
+            <p className="text-gray-900/80 text-sm leading-relaxed">{trainer.bio || "No bio provided."}</p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             {/* Specializations */}
-            <div className="bg-card border border-border rounded-2xl p-6">
+            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
               <h3 className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-3">Specializations</h3>
               <div className="flex flex-wrap gap-1.5">
                 {trainer.specializations?.length > 0 ? trainer.specializations.map((s) => (
-                  <span key={s} className="px-3 py-1 bg-bg-3 border border-border rounded-lg text-xs text-white">{s}</span>
+                  <span key={s} className="px-3 py-1 bg-bg-3 border border-border rounded-lg text-xs text-gray-900">{s}</span>
                 )) : <span className="text-muted text-xs">None listed</span>}
               </div>
             </div>
 
             {/* Certifications */}
-            <div className="bg-card border border-border rounded-2xl p-6">
+            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
               <h3 className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-3">Certifications</h3>
               <div className="flex flex-wrap gap-1.5">
                 {trainer.certifications?.length > 0 ? trainer.certifications.map((c) => (
@@ -305,11 +305,11 @@ export default function TrainerDetailPage() {
           </div>
 
           {/* Cities */}
-          <div className="bg-card border border-border rounded-2xl p-6">
+          <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
             <h3 className="text-[10px] text-muted uppercase tracking-wider font-semibold mb-3">Service Cities</h3>
             <div className="flex flex-wrap gap-1.5">
               {trainer.cities?.length > 0 ? trainer.cities.map((c) => (
-                <span key={c} className="px-3 py-1 bg-bg-3 border border-border rounded-lg text-xs text-white">📍 {c}</span>
+                <span key={c} className="px-3 py-1 bg-bg-3 border border-border rounded-lg text-xs text-gray-900">📍 {c}</span>
               )) : <span className="text-muted text-xs">Not specified</span>}
             </div>
           </div>
@@ -317,7 +317,7 @@ export default function TrainerDetailPage() {
       )}
 
       {tab === "clients" && (
-        <div className="bg-card border border-border rounded-2xl overflow-hidden">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
           {bookings.length === 0 ? (
             <div className="p-12 text-center text-muted text-sm">No bookings yet</div>
           ) : (
@@ -333,11 +333,11 @@ export default function TrainerDetailPage() {
               </div>
               <div className="divide-y divide-border">
                 {bookings.map((b) => (
-                  <div key={b.id} className="px-5 py-3 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center flex flex-col gap-1.5 hover:bg-white/[0.01]">
-                    <div className="col-span-3 text-white text-sm font-medium">{b.userName}</div>
-                    <div className="col-span-2 text-white text-sm">{b.planName}</div>
+                  <div key={b.id} className="px-5 py-3 lg:grid lg:grid-cols-12 lg:gap-4 lg:items-center flex flex-col gap-1.5 hover:bg-gray-50">
+                    <div className="col-span-3 text-gray-900 text-sm font-medium">{b.userName}</div>
+                    <div className="col-span-2 text-gray-900 text-sm">{b.planName}</div>
                     <div className="col-span-2">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${STATUS_STYLE[b.status] || "bg-white/5 text-muted"}`}>{b.status}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${STATUS_STYLE[b.status] || "bg-gray-50 text-muted"}`}>{b.status}</span>
                     </div>
                     <div className="col-span-1 text-muted text-xs">{b.booked_slot || "—"}</div>
                     <div className="col-span-1 text-muted text-xs">{b.start_date ? new Date(b.start_date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" }) : "—"}</div>
@@ -352,14 +352,14 @@ export default function TrainerDetailPage() {
       )}
 
       {tab === "schedule" && (
-        <div className="bg-card border border-border rounded-2xl p-6">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6">
           {slots.length === 0 ? (
             <div className="text-center py-8 text-muted text-sm">No available slots configured</div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
               {DAYS_ORDER.filter((d) => groupedSlots[d]).map((day) => (
                 <div key={day} className="bg-bg-3/50 border border-border rounded-xl p-4">
-                  <p className="text-white text-sm font-semibold mb-2">{DAY_SHORT[day]}</p>
+                  <p className="text-gray-900 text-sm font-semibold mb-2">{DAY_SHORT[day]}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {groupedSlots[day].map((t) => (
                       <span key={t} className="px-2.5 py-1 bg-accent/10 text-accent text-[11px] font-medium rounded-lg">{t}</span>
@@ -375,14 +375,14 @@ export default function TrainerDetailPage() {
       {tab === "reviews" && (
         <div className="space-y-3">
           {reviews.length === 0 ? (
-            <div className="text-center py-16 bg-card border border-border rounded-2xl text-muted text-sm">No reviews yet</div>
+            <div className="text-center py-16 bg-white shadow-sm border border-gray-100 rounded-2xl text-muted text-sm">No reviews yet</div>
           ) : reviews.map((r) => (
-            <div key={r.id} className="bg-card border border-border rounded-2xl p-5">
+            <div key={r.id} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5">
               <div className="flex items-center gap-3 mb-2">
-                <p className="text-white text-sm font-medium">{r.userName}</p>
+                <p className="text-gray-900 text-sm font-medium">{r.userName}</p>
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((s) => (
-                    <span key={s} className={s <= r.rating ? "text-gold" : "text-white/10"}>★</span>
+                    <span key={s} className={s <= r.rating ? "text-gold" : "text-gray-900/10"}>★</span>
                   ))}
                 </div>
                 <span className="text-muted text-[11px] ml-auto">

@@ -259,10 +259,10 @@ function TrainerApplyContent() {
       {/* Header */}
       <div className="border-b border-border bg-bg-2/50 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl text-white">
+          <Link href="/" className="font-serif text-2xl text-gray-900">
             Onli<em className="text-accent italic">fit</em>
           </Link>
-          <Link href="/" className="text-sm text-muted hover:text-white transition-colors">
+          <Link href="/" className="text-sm text-muted hover:text-gray-900 transition-colors">
             ← Back to home
           </Link>
         </div>
@@ -280,7 +280,7 @@ function TrainerApplyContent() {
               }`}>
                 {i < step ? "✓" : i + 1}
               </div>
-              <span className={`text-xs font-medium hidden sm:block ${i <= step ? "text-white" : "text-muted"}`}>{s}</span>
+              <span className={`text-xs font-medium hidden sm:block ${i <= step ? "text-gray-900" : "text-muted"}`}>{s}</span>
               {i < STEPS.length - 1 && <div className={`flex-1 h-px ${i < step ? "bg-accent" : "bg-border"}`} />}
             </div>
           ))}
@@ -289,7 +289,7 @@ function TrainerApplyContent() {
         {/* Step 0: Account */}
         {step === 0 && (
           <div>
-            <h1 className="font-serif text-3xl text-white mb-2">Join as a Trainer</h1>
+            <h1 className="font-serif text-3xl text-gray-900 mb-2">Join as a Trainer</h1>
             <p className="text-muted text-sm mb-8">Create your account to get started</p>
 
             <div className="space-y-4">
@@ -298,7 +298,7 @@ function TrainerApplyContent() {
                 <input
                   type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}
                   placeholder="Your full name"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
                 />
               </div>
               <div>
@@ -306,7 +306,7 @@ function TrainerApplyContent() {
                 <input
                   type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                   placeholder="trainer@example.com"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
                 />
               </div>
               <div>
@@ -314,7 +314,7 @@ function TrainerApplyContent() {
                 <input
                   type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                   placeholder="Min 6 characters"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
                 />
               </div>
               <div>
@@ -322,7 +322,7 @@ function TrainerApplyContent() {
                 <input
                   type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
                   placeholder="+91 XXXXX XXXXX"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
                 />
               </div>
               <div>
@@ -334,7 +334,7 @@ function TrainerApplyContent() {
                       type="button"
                       onClick={() => setGender(g)}
                       className={`flex-1 py-3 rounded-xl text-sm font-semibold border transition-all capitalize ${
-                        gender === g ? "bg-accent/10 border-accent/40 text-accent" : "bg-bg-3 border-border text-muted hover:text-white"
+                        gender === g ? "bg-accent/10 border-accent/40 text-accent" : "bg-bg-3 border-border text-muted hover:text-gray-900"
                       }`}
                     >
                       {g === "male" ? "♂ Male" : "♀ Female"}
@@ -346,7 +346,7 @@ function TrainerApplyContent() {
                 <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">City</label>
                 <input
                   type="text" value={city} onChange={(e) => setCity(e.target.value)}
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
                 />
               </div>
             </div>
@@ -370,7 +370,7 @@ function TrainerApplyContent() {
         {/* Step 1: Profile */}
         {step === 1 && (
           <div>
-            <h1 className="font-serif text-3xl text-white mb-2">Your Trainer Profile</h1>
+            <h1 className="font-serif text-3xl text-gray-900 mb-2">Your Trainer Profile</h1>
             <p className="text-muted text-sm mb-8">Tell clients about yourself</p>
 
             <div className="space-y-6">
@@ -386,7 +386,7 @@ function TrainerApplyContent() {
                     )}
                   </div>
                   <div>
-                    <label className="inline-block px-4 py-2 bg-bg-3 border border-border rounded-lg text-xs font-semibold text-white hover:border-accent/40 cursor-pointer transition-all">
+                    <label className="inline-block px-4 py-2 bg-bg-3 border border-border rounded-lg text-xs font-semibold text-gray-900 hover:border-accent/40 cursor-pointer transition-all">
                       Upload photo
                       <input
                         type="file"
@@ -412,7 +412,7 @@ function TrainerApplyContent() {
                   value={bio} onChange={(e) => setBio(e.target.value)}
                   placeholder="Tell potential clients about your training philosophy, approach, and what makes you different..."
                   rows={4}
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40 resize-none"
+                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40 resize-none"
                 />
               </div>
 
@@ -422,7 +422,7 @@ function TrainerApplyContent() {
                   type="number" value={experienceYears} onChange={(e) => setExperienceYears(e.target.value)}
                   placeholder="e.g. 5"
                   min="0" max="50"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
                 />
               </div>
 
@@ -471,7 +471,7 @@ function TrainerApplyContent() {
                     value={otherCert}
                     onChange={(e) => setOtherCert(e.target.value)}
                     placeholder="Enter your certification name"
-                    className="mt-3 w-full px-4 py-2.5 rounded-lg bg-bg-3 border border-border text-sm text-white placeholder:text-muted focus:border-accent focus:outline-none transition-colors"
+                    className="mt-3 w-full px-4 py-2.5 rounded-lg bg-bg-3 border border-border text-sm text-gray-900 placeholder:text-muted focus:border-accent focus:outline-none transition-colors"
                   />
                 )}
               </div>
@@ -482,7 +482,7 @@ function TrainerApplyContent() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => { setError(""); setStep(0); }}
-                className="px-6 py-3.5 rounded-xl font-medium text-sm border border-border text-muted hover:text-white transition-all"
+                className="px-6 py-3.5 rounded-xl font-medium text-sm border border-border text-muted hover:text-gray-900 transition-all"
               >
                 ← Back
               </button>
@@ -499,7 +499,7 @@ function TrainerApplyContent() {
         {/* Step 2: Plan & Schedule */}
         {step === 2 && (
           <div>
-            <h1 className="font-serif text-3xl text-white mb-2">Plan & Schedule</h1>
+            <h1 className="font-serif text-3xl text-gray-900 mb-2">Plan & Schedule</h1>
             <p className="text-muted text-sm mb-8">Choose your plan type and availability</p>
 
             <div className="space-y-8">
@@ -519,7 +519,7 @@ function TrainerApplyContent() {
                             ? "bg-card/50 border border-border/50 text-muted/50 cursor-not-allowed opacity-50"
                             : planType === plan.value
                             ? `ring-2 ${plan.color === "accent" ? "bg-accent/10 ring-accent text-accent" : plan.color === "orange" ? "bg-orange/10 ring-orange text-orange" : "bg-gold/10 ring-gold text-gold"}`
-                            : "bg-card border border-border text-white hover:border-border-2"
+                            : "bg-white shadow-sm border border-gray-100 text-gray-900 hover:border-border-2"
                         }`}
                       >
                         <span className="font-bold">{plan.label}</span>
@@ -562,7 +562,7 @@ function TrainerApplyContent() {
                       className={`flex flex-col items-center gap-1 px-5 py-4 rounded-xl text-sm font-medium transition-all ${
                         availableTimes.includes(tp.value)
                           ? "bg-accent text-bg ring-2 ring-accent/40"
-                          : "bg-card border border-border text-white hover:border-accent/40"
+                          : "bg-white shadow-sm border border-gray-100 text-gray-900 hover:border-accent/40"
                       }`}
                     >
                       <span className="font-bold text-base">{tp.label}</span>
@@ -579,7 +579,7 @@ function TrainerApplyContent() {
                   <p className="text-muted text-xs mb-4">What you take home per client per month</p>
                   <div className="bg-card border border-accent/20 rounded-2xl p-6">
                     <div className="flex items-center justify-between mb-5">
-                      <span className="text-white font-semibold text-sm">
+                      <span className="text-gray-900 font-semibold text-sm">
                         {PLAN_OPTIONS.find(p => p.value === planType)?.label}
                       </span>
                       <span className="text-muted text-xs">Client pays {PLAN_EARNINGS[planType].planPrice}/mo</span>
@@ -587,12 +587,12 @@ function TrainerApplyContent() {
                     <div className="space-y-3 mb-5">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted">{PLAN_EARNINGS[planType].sessions} sessions × ₹{PLAN_EARNINGS[planType].perSession}</span>
-                        <span className="text-white font-medium">{PLAN_EARNINGS[planType].trainerTotal}</span>
+                        <span className="text-gray-900 font-medium">{PLAN_EARNINGS[planType].trainerTotal}</span>
                       </div>
                       {PLAN_EARNINGS[planType].extras?.map((extra, i) => (
                         <div key={i} className="flex items-center justify-between text-sm">
                           <span className="text-muted">{extra.label}</span>
-                          <span className="text-white font-medium">{extra.amount}</span>
+                          <span className="text-gray-900 font-medium">{extra.amount}</span>
                         </div>
                       ))}
                     </div>
@@ -603,7 +603,7 @@ function TrainerApplyContent() {
                       </span>
                     </div>
                     <p className="text-muted text-[11px] mt-4 leading-relaxed">
-                      💰 With 10 clients you earn <span className="text-white font-semibold">
+                      💰 With 10 clients you earn <span className="text-gray-900 font-semibold">
                       ₹{((PLAN_EARNINGS[planType].sessions * PLAN_EARNINGS[planType].perSession + (PLAN_EARNINGS[planType].extras?.reduce((sum, e) => sum + parseInt(e.amount.replace(/[₹,]/g, "")), 0) || 0)) * 10).toLocaleString("en-IN")}
                       </span>/month. Payouts every 1st & 15th.
                     </p>
@@ -617,7 +617,7 @@ function TrainerApplyContent() {
             <div className="flex gap-3 mt-8">
               <button
                 onClick={() => { setError(""); setStep(1); }}
-                className="px-6 py-3.5 rounded-xl font-medium text-sm border border-border text-muted hover:text-white transition-all"
+                className="px-6 py-3.5 rounded-xl font-medium text-sm border border-border text-muted hover:text-gray-900 transition-all"
               >
                 ← Back
               </button>
@@ -638,12 +638,12 @@ function TrainerApplyContent() {
             <div className="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center text-4xl mx-auto mb-6">
               ✓
             </div>
-            <h1 className="font-serif text-3xl text-white mb-3">Application Submitted!</h1>
+            <h1 className="font-serif text-3xl text-gray-900 mb-3">Application Submitted!</h1>
             <p className="text-muted text-[15px] leading-relaxed max-w-md mx-auto mb-8">
               Thank you for applying to join Onlifit as a trainer. Our team will review your profile and get back to you within 24–48 hours.
             </p>
-            <div className="bg-card border border-border rounded-2xl p-6 max-w-sm mx-auto mb-8 text-left">
-              <h3 className="text-white font-semibold text-sm mb-3">What happens next?</h3>
+            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 max-w-sm mx-auto mb-8 text-left">
+              <h3 className="text-gray-900 font-semibold text-sm mb-3">What happens next?</h3>
               <ol className="space-y-2.5">
                 <li className="flex items-start gap-2.5 text-sm text-muted">
                   <span className="text-accent font-bold">1.</span>

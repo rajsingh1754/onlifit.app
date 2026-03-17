@@ -167,7 +167,7 @@ export default function TrainerDetailPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-white text-lg mb-2">Trainer not found</p>
+          <p className="text-gray-900 text-lg mb-2">Trainer not found</p>
           <Link href="/trainers" className="text-accent text-sm hover:underline">Browse all trainers</Link>
         </div>
       </div>
@@ -179,10 +179,10 @@ export default function TrainerDetailPage() {
       {/* Header */}
       <div className="border-b border-border bg-bg-2/50 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl text-white">
+          <Link href="/" className="font-serif text-2xl text-gray-900">
             Onli<em className="text-accent italic">fit</em>
           </Link>
-          <Link href="/trainers" className="text-sm text-muted hover:text-white transition-colors">
+          <Link href="/trainers" className="text-sm text-muted hover:text-gray-900 transition-colors">
             ← All trainers
           </Link>
         </div>
@@ -200,7 +200,7 @@ export default function TrainerDetailPage() {
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="font-serif text-4xl text-white tracking-tight">{trainer.full_name}</h1>
+              <h1 className="font-serif text-4xl text-gray-900 tracking-tight">{trainer.full_name}</h1>
               {trainer.is_verified && (
                 <span className="bg-accent/10 text-accent text-xs font-bold px-2 py-0.5 rounded-full">Verified</span>
               )}
@@ -242,11 +242,11 @@ export default function TrainerDetailPage() {
 
         {/* Available Time Slots */}
         <div className="mb-10">
-          <h2 className="font-serif text-2xl text-white mb-2">Available Slots</h2>
+          <h2 className="font-serif text-2xl text-gray-900 mb-2">Available Slots</h2>
           <p className="text-muted text-sm mb-5">Pick an hourly slot — booked slots are shown in red</p>
           
           {slots.length === 0 ? (
-            <div className="bg-card border border-border rounded-2xl p-8 text-center">
+            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-8 text-center">
               <p className="text-muted text-sm">This trainer hasn&apos;t set their availability yet.</p>
             </div>
           ) : (
@@ -255,8 +255,8 @@ export default function TrainerDetailPage() {
                 const daySlots = slots.filter((s) => s.day === day);
                 if (daySlots.length === 0) return null;
                 return (
-                  <div key={day} className="bg-card border border-border rounded-xl p-4">
-                    <h4 className="text-sm font-bold text-white mb-3 capitalize">{day}</h4>
+                  <div key={day} className="bg-white shadow-sm border border-gray-100 rounded-xl p-4">
+                    <h4 className="text-sm font-bold text-gray-900 mb-3 capitalize">{day}</h4>
                     <div className="flex flex-wrap gap-2">
                       {daySlots.map((s) => {
                         const slotKey = `${s.day}:${s.time}`;
@@ -272,7 +272,7 @@ export default function TrainerDetailPage() {
                                 ? "bg-red-500/10 text-red-400 border border-red-500/20 cursor-not-allowed line-through"
                                 : isSelected
                                   ? "bg-accent text-bg ring-2 ring-accent/40"
-                                  : "bg-bg-3 border border-border text-white hover:border-accent/40"
+                                  : "bg-bg-3 border border-border text-gray-900 hover:border-accent/40"
                             }`}
                           >
                             {formatTime(s.time)}
@@ -298,7 +298,7 @@ export default function TrainerDetailPage() {
 
         {/* Duration */}
         <div className="mb-10">
-          <h2 className="font-serif text-2xl text-white mb-2">Duration</h2>
+          <h2 className="font-serif text-2xl text-gray-900 mb-2">Duration</h2>
           <p className="text-muted text-sm mb-5">How long do you want to train?</p>
           <div className="flex flex-wrap gap-3">
             {DURATION_OPTIONS.map((d) => (
@@ -308,7 +308,7 @@ export default function TrainerDetailPage() {
                 className={`px-6 py-3 rounded-xl text-sm font-bold transition-all ${
                   selectedDuration === d.months
                     ? "bg-accent text-bg ring-2 ring-accent/40"
-                    : "bg-card border border-border text-white hover:border-accent/40"
+                    : "bg-white shadow-sm border border-gray-100 text-gray-900 hover:border-accent/40"
                 }`}
               >
                 {d.label}
@@ -319,14 +319,14 @@ export default function TrainerDetailPage() {
 
         {/* Plan & Book */}
         <div className="mb-12">
-          <h2 className="font-serif text-2xl text-white mb-6">Plan</h2>
+          <h2 className="font-serif text-2xl text-gray-900 mb-6">Plan</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {plans.filter((plan) => trainer.plan_types?.includes(plan.slug)).map((plan) => {
               const totalPrice = plan.price * selectedDuration;
               return (
                 <div
                   key={plan.id}
-                  className="bg-card border border-border hover:border-border-2 rounded-2xl p-6 transition-all"
+                  className="bg-white shadow-sm border border-gray-100 hover:border-border-2 rounded-2xl p-6 transition-all"
                 >
                   <span className={`inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3 ${
                     plan.slug === "offline" ? "bg-accent/10 text-accent" :
@@ -335,7 +335,7 @@ export default function TrainerDetailPage() {
                   }`}>
                     {PLAN_LABEL[plan.slug] || plan.name}
                   </span>
-                  <div className="font-serif text-3xl text-white mb-1">
+                  <div className="font-serif text-3xl text-gray-900 mb-1">
                     <sup className="text-lg">₹</sup>{totalPrice.toLocaleString("en-IN")}
                   </div>
                   <p className="text-muted text-xs mb-1">
@@ -347,7 +347,7 @@ export default function TrainerDetailPage() {
                   <div className="border-t border-border pt-4">
                     <ul className="space-y-2">
                       {plan.features?.map((feat) => (
-                        <li key={feat} className="flex items-start gap-2 text-sm text-white/60">
+                        <li key={feat} className="flex items-start gap-2 text-sm text-gray-900/60">
                           <span className="text-accent text-xs mt-0.5">✓</span>
                           {feat}
                         </li>
@@ -369,7 +369,7 @@ export default function TrainerDetailPage() {
         {/* Rating Overview */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-serif text-2xl text-white">Ratings & Reviews</h2>
+            <h2 className="font-serif text-2xl text-gray-900">Ratings & Reviews</h2>
             <button
               onClick={() => {
                 if (!currentUser) {
@@ -385,10 +385,10 @@ export default function TrainerDetailPage() {
           </div>
 
           {/* Rating summary */}
-          <div className="bg-card border border-border rounded-2xl p-6 mb-6">
+          <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 mb-6">
             <div className="flex items-center gap-6">
               <div className="text-center">
-                <div className="font-serif text-[48px] text-white leading-none">{trainer.rating}</div>
+                <div className="font-serif text-[48px] text-gray-900 leading-none">{trainer.rating}</div>
                 <div className="text-gold text-sm mt-1">{"★".repeat(Math.round(trainer.rating))}</div>
                 <p className="text-muted text-xs mt-1">{trainer.total_reviews} review{trainer.total_reviews !== 1 ? "s" : ""}</p>
               </div>
@@ -414,13 +414,13 @@ export default function TrainerDetailPage() {
           {/* Review form */}
           {showReviewForm && (
             <div className="bg-card border border-accent/20 rounded-2xl p-6 mb-6">
-              <h3 className="text-white font-semibold text-sm mb-4">Rate this trainer</h3>
+              <h3 className="text-gray-900 font-semibold text-sm mb-4">Rate this trainer</h3>
               <div className="flex items-center gap-1 mb-4">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     onClick={() => setReviewRating(star)}
-                    className={`text-2xl transition-all ${star <= reviewRating ? "text-gold" : "text-white/15"} hover:scale-110`}
+                    className={`text-2xl transition-all ${star <= reviewRating ? "text-gold" : "text-gray-900/15"} hover:scale-110`}
                   >
                     ★
                   </button>
@@ -432,7 +432,7 @@ export default function TrainerDetailPage() {
                 onChange={(e) => setReviewComment(e.target.value)}
                 placeholder="Share your experience with this trainer..."
                 rows={3}
-                className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40 resize-none mb-4"
+                className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40 resize-none mb-4"
               />
               <div className="flex gap-3">
                 <button
@@ -444,7 +444,7 @@ export default function TrainerDetailPage() {
                 </button>
                 <button
                   onClick={() => setShowReviewForm(false)}
-                  className="px-6 py-2.5 rounded-lg text-sm font-medium border border-border text-muted hover:text-white transition-all"
+                  className="px-6 py-2.5 rounded-lg text-sm font-medium border border-border text-muted hover:text-gray-900 transition-all"
                 >
                   Cancel
                 </button>
@@ -456,13 +456,13 @@ export default function TrainerDetailPage() {
           {reviews.length > 0 ? (
             <div className="space-y-4">
               {reviews.map((review) => (
-                <div key={review.id} className="bg-card border border-border rounded-xl p-5">
+                <div key={review.id} className="bg-white shadow-sm border border-gray-100 rounded-xl p-5">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-9 h-9 rounded-full bg-bg-3 border border-border flex items-center justify-center text-sm text-muted">
                       {(review.profile as any)?.full_name?.charAt(0) || "U"}
                     </div>
                     <div>
-                      <p className="text-white text-sm font-semibold">{(review.profile as any)?.full_name}</p>
+                      <p className="text-gray-900 text-sm font-semibold">{(review.profile as any)?.full_name}</p>
                       <span className="text-gold text-xs">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
                     </div>
                   </div>
@@ -471,7 +471,7 @@ export default function TrainerDetailPage() {
               ))}
             </div>
           ) : (
-            <div className="bg-card border border-border rounded-xl p-8 text-center">
+            <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-8 text-center">
               <p className="text-muted text-sm">No reviews yet. Be the first to rate this trainer!</p>
             </div>
           )}

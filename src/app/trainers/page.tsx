@@ -48,11 +48,11 @@ export default function TrainersPage() {
       {/* Header */}
       <div className="border-b border-border bg-bg-2/50 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl text-white">
+          <Link href="/" className="font-serif text-2xl text-gray-900">
             Onli<em className="text-accent italic">fit</em>
           </Link>
           <div className="flex gap-3">
-            <Link href="/dashboard" className="text-sm text-muted hover:text-white transition-colors">
+            <Link href="/dashboard" className="text-sm text-muted hover:text-gray-900 transition-colors">
               Dashboard
             </Link>
           </div>
@@ -63,7 +63,7 @@ export default function TrainersPage() {
         {/* Page header */}
         <div className="mb-10">
           <p className="text-[11px] font-bold text-accent uppercase tracking-[0.14em] mb-3">Browse trainers</p>
-          <h1 className="font-serif text-4xl md:text-5xl text-white mb-3 tracking-tight">
+          <h1 className="font-serif text-4xl md:text-5xl text-gray-900 mb-3 tracking-tight">
             Find your <em className="text-accent italic">perfect</em> trainer
           </h1>
           <p className="text-muted text-base max-w-lg">Verified trainers with real ratings. Pick your match, choose your plan, and start training.</p>
@@ -76,12 +76,12 @@ export default function TrainersPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search trainers..."
-            className="px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-lg text-white text-sm outline-none focus:border-accent/40 placeholder:text-white/20 w-64"
+            className="px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-lg text-gray-900 text-sm outline-none focus:border-accent/40 placeholder:text-gray-900/20 w-64"
           />
           <select
             value={specFilter}
             onChange={(e) => setSpecFilter(e.target.value)}
-            className="px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-lg text-white text-sm outline-none focus:border-accent/40 appearance-none"
+            className="px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-lg text-gray-900 text-sm outline-none focus:border-accent/40 appearance-none"
           >
             <option value="" className="bg-bg-3">All specializations</option>
             {SPECIALIZATIONS.map((s) => (
@@ -91,7 +91,7 @@ export default function TrainersPage() {
           <select
             value={planFilter}
             onChange={(e) => setPlanFilter(e.target.value)}
-            className="px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-lg text-white text-sm outline-none focus:border-accent/40 appearance-none"
+            className="px-4 py-2.5 bg-white/[0.04] border border-white/10 rounded-lg text-gray-900 text-sm outline-none focus:border-accent/40 appearance-none"
           >
             <option value="" className="bg-bg-3">All plan types</option>
             {PLAN_TYPES.map((p) => (
@@ -104,23 +104,23 @@ export default function TrainersPage() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-card border border-border rounded-2xl p-6 animate-pulse">
+              <div key={i} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 animate-pulse">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-14 h-14 rounded-full bg-white/5" />
+                  <div className="w-14 h-14 rounded-full bg-gray-50" />
                   <div className="flex-1">
-                    <div className="h-4 bg-white/5 rounded w-32 mb-2" />
-                    <div className="h-3 bg-white/5 rounded w-20" />
+                    <div className="h-4 bg-gray-50 rounded w-32 mb-2" />
+                    <div className="h-3 bg-gray-50 rounded w-20" />
                   </div>
                 </div>
-                <div className="h-3 bg-white/5 rounded w-full mb-2" />
-                <div className="h-3 bg-white/5 rounded w-3/4" />
+                <div className="h-3 bg-gray-50 rounded w-full mb-2" />
+                <div className="h-3 bg-gray-50 rounded w-3/4" />
               </div>
             ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-muted text-lg">No trainers found</p>
-            <p className="text-white/20 text-sm mt-2">Try adjusting your filters</p>
+            <p className="text-gray-900/20 text-sm mt-2">Try adjusting your filters</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -128,7 +128,7 @@ export default function TrainersPage() {
               <Link
                 key={trainer.id}
                 href={`/trainers/${trainer.id}`}
-                className="bg-card border border-border rounded-2xl p-6 hover:border-border-2 hover:-translate-y-1 transition-all group"
+                className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 hover:border-border-2 hover:-translate-y-1 transition-all group"
               >
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-14 h-14 rounded-full bg-bg-3 border border-border flex items-center justify-center text-xl text-muted overflow-hidden">
@@ -140,7 +140,7 @@ export default function TrainersPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-white text-[15px] truncate">{trainer.full_name}</h3>
+                      <h3 className="font-bold text-gray-900 text-[15px] truncate">{trainer.full_name}</h3>
                       {trainer.is_verified && (
                         <span className="text-accent text-xs">✓</span>
                       )}

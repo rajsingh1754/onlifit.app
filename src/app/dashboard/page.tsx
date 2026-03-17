@@ -47,7 +47,7 @@ const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string }> =
   active: { bg: "bg-accent/10", text: "text-accent", dot: "bg-accent" },
   confirmed: { bg: "bg-teal-500/10", text: "text-teal-400", dot: "bg-teal-400" },
   pending: { bg: "bg-gold/10", text: "text-gold", dot: "bg-gold" },
-  completed: { bg: "bg-white/5", text: "text-muted", dot: "bg-white/30" },
+  completed: { bg: "bg-gray-50", text: "text-muted", dot: "bg-white/30" },
   cancelled: { bg: "bg-red-500/10", text: "text-red-400", dot: "bg-red-400" },
 };
 
@@ -92,7 +92,7 @@ function ProgressRing({ percent, size = 56, stroke = 4, accentClass = "stroke-ac
 
   return (
     <svg width={size} height={size} className="transform -rotate-90">
-      <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={stroke} />
+      <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth={stroke} />
       <circle
         cx={size / 2} cy={size / 2} r={radius} fill="none"
         className={accentClass}
@@ -229,7 +229,7 @@ export default function DashboardPage() {
       {/* ─── Sticky Header ─── */}
       <header className="border-b border-border bg-bg/80 backdrop-blur-2xl sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl text-white">
+          <Link href="/" className="font-serif text-2xl text-gray-900">
             Onli<em className="text-accent italic">fit</em>
           </Link>
           <div className="flex items-center gap-5">
@@ -243,10 +243,10 @@ export default function DashboardPage() {
                 Trainer Dashboard
               </Link>
             )}
-            <Link href="/trainers" className="text-sm text-muted hover:text-white transition-colors">
+            <Link href="/trainers" className="text-sm text-muted hover:text-gray-900 transition-colors">
               Trainers
             </Link>
-            <button onClick={handleSignOut} className="text-sm text-muted hover:text-white transition-colors">
+            <button onClick={handleSignOut} className="text-sm text-muted hover:text-gray-900 transition-colors">
               Sign out
             </button>
             {/* Avatar */}
@@ -265,7 +265,7 @@ export default function DashboardPage() {
         {/* ─── Greeting ─── */}
         <div className={`mb-10 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
           <p className="text-muted text-sm font-medium mb-1">{greeting}</p>
-          <h1 className="font-serif text-4xl sm:text-5xl text-white tracking-tight">
+          <h1 className="font-serif text-4xl sm:text-5xl text-gray-900 tracking-tight">
             {profile?.full_name?.split(" ")[0] || "there"}
             <span className="text-accent">.</span>
           </h1>
@@ -279,14 +279,14 @@ export default function DashboardPage() {
             { label: "Monthly Spend", value: monthlySpend, prefix: "₹", icon: "💰", gradient: "from-gold/10 via-transparent to-transparent", accent: true },
             { label: "Bookings", value: bookings.length, icon: "📊", gradient: "from-teal-500/10 via-transparent to-transparent" },
           ].map((stat) => (
-            <div key={stat.label} className="group relative bg-card border border-border rounded-2xl p-5 overflow-hidden hover:border-border-2 transition-all duration-300 hover:-translate-y-0.5">
+            <div key={stat.label} className="group relative bg-white shadow-sm border border-gray-100 rounded-2xl p-5 overflow-hidden hover:border-border-2 transition-all duration-300 hover:-translate-y-0.5">
               <div className={`absolute inset-0 bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
               <div className="relative">
                 <div className="flex items-center justify-between mb-3">
                   <p className="text-muted text-[11px] font-bold uppercase tracking-widest">{stat.label}</p>
                   <span className="text-lg">{stat.icon}</span>
                 </div>
-                <p className={`font-serif text-3xl ${stat.accent ? "text-accent" : "text-white"}`}>
+                <p className={`font-serif text-3xl ${stat.accent ? "text-accent" : "text-gray-900"}`}>
                   <AnimatedNumber value={stat.value} prefix={stat.prefix || ""} />
                 </p>
               </div>
@@ -299,7 +299,7 @@ export default function DashboardPage() {
           <div className={`mb-10 transition-all duration-700 delay-200 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              <h2 className="text-white text-sm font-semibold uppercase tracking-wider">Current Plan</h2>
+              <h2 className="text-gray-900 text-sm font-semibold uppercase tracking-wider">Current Plan</h2>
             </div>
             <div className={`relative rounded-3xl overflow-hidden border ${PLAN_BORDER[nextBooking.trainer?.plan_types?.[0] || "virtual"]} bg-gradient-to-r ${PLAN_GRADIENT[nextBooking.trainer?.plan_types?.[0] || "virtual"]} bg-card`}>
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(200,241,53,0.05),transparent_60%)]" />
@@ -311,13 +311,13 @@ export default function DashboardPage() {
                       <img src={nextBooking.trainer.profile.avatar_url} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-white text-lg font-serif">{nextBooking.trainer?.profile?.full_name?.charAt(0) || "T"}</span>
+                        <span className="text-gray-900 text-lg font-serif">{nextBooking.trainer?.profile?.full_name?.charAt(0) || "T"}</span>
                       </div>
                     )}
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <h3 className="text-white font-semibold text-lg truncate">{nextBooking.trainer?.profile?.full_name}</h3>
+                      <h3 className="text-gray-900 font-semibold text-lg truncate">{nextBooking.trainer?.profile?.full_name}</h3>
                       <span className="text-yellow-400 text-xs">★ {nextBooking.trainer?.rating?.toFixed(1)}</span>
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
@@ -348,12 +348,12 @@ export default function DashboardPage() {
                         accentClass={`stroke-current ${PLAN_ACCENT[nextBooking.trainer?.plan_types?.[0] || "virtual"]}`}
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">{getProgress(nextBooking.start_date, nextBooking.duration_months || 1)}%</span>
+                        <span className="text-gray-900 text-xs font-bold">{getProgress(nextBooking.start_date, nextBooking.duration_months || 1)}%</span>
                       </div>
                     </div>
                   )}
                   <div className="text-right">
-                    <p className="font-serif text-3xl text-white">₹{((nextBooking.plan?.price || 0) * (nextBooking.duration_months || 1)).toLocaleString("en-IN")}</p>
+                    <p className="font-serif text-3xl text-gray-900">₹{((nextBooking.plan?.price || 0) * (nextBooking.duration_months || 1)).toLocaleString("en-IN")}</p>
                     <p className="text-muted text-[11px] mt-0.5">
                       {nextBooking.start_date ? `Ends ${getEndDate(nextBooking.start_date, nextBooking.duration_months || 1)}` : "Pending start"}
                     </p>
@@ -367,7 +367,7 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-[11px] text-muted">{getDaysRemaining(nextBooking.start_date, nextBooking.duration_months || 1)} days left</span>
                   </div>
-                  <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                  <div className="w-full h-1 bg-gray-50 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-1000 ease-out ${nextBooking.trainer?.plan_types?.[0] === "elite" ? "bg-gold" : nextBooking.trainer?.plan_types?.[0] === "virtual" ? "bg-orange" : "bg-accent"}`}
                       style={{ width: `${Math.max(2, getProgress(nextBooking.start_date, nextBooking.duration_months || 1))}%` }}
@@ -382,7 +382,7 @@ export default function DashboardPage() {
                   View profile →
                 </Link>
                 {nextBooking.trainer?.profile?.phone && (
-                  <a href={`tel:${nextBooking.trainer.profile.phone}`} className="text-xs text-muted hover:text-white transition-colors flex items-center gap-1">
+                  <a href={`tel:${nextBooking.trainer.profile.phone}`} className="text-xs text-muted hover:text-gray-900 transition-colors flex items-center gap-1">
                     📞 Call trainer
                   </a>
                 )}
@@ -399,7 +399,7 @@ export default function DashboardPage() {
                 key={t}
                 onClick={() => setTab(t)}
                 className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                  tab === t ? "bg-white text-bg shadow-lg shadow-white/5" : "text-muted hover:text-white"
+                  tab === t ? "bg-white text-bg shadow-lg shadow-white/5" : "text-muted hover:text-gray-900"
                 }`}
               >
                 {t === "active" ? `Active (${activeBookings.length})` : `History (${pastBookings.length})`}
@@ -422,7 +422,7 @@ export default function DashboardPage() {
                 <div className="w-20 h-20 rounded-full bg-accent/5 border border-accent/10 flex items-center justify-center mx-auto mb-6">
                   <span className="text-4xl">🚀</span>
                 </div>
-                <h3 className="text-white font-serif text-3xl mb-3">Start your journey</h3>
+                <h3 className="text-gray-900 font-serif text-3xl mb-3">Start your journey</h3>
                 <p className="text-muted text-sm mb-8 max-w-md mx-auto leading-relaxed">
                   Connect with Hyderabad&apos;s top verified trainers. Choose a plan that fits your goals and schedule.
                 </p>
@@ -453,7 +453,7 @@ export default function DashboardPage() {
             return (
               <div
                 key={booking.id}
-                className={`group bg-card border border-border rounded-2xl overflow-hidden hover:border-border-2 transition-all duration-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+                className={`group bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden hover:border-border-2 transition-all duration-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                 style={{ transitionDelay: `${300 + i * 80}ms` }}
               >
                 <div className="p-5 sm:p-6">
@@ -470,7 +470,7 @@ export default function DashboardPage() {
                         )}
                       </div>
                       {tab === "active" && (
-                        <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-card border border-border flex items-center justify-center">
+                        <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center">
                           <div className={`w-2 h-2 rounded-full ${status.dot}`} />
                         </div>
                       )}
@@ -479,7 +479,7 @@ export default function DashboardPage() {
                     {/* Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <h3 className="text-white font-semibold">{tp?.full_name}</h3>
+                        <h3 className="text-gray-900 font-semibold">{tp?.full_name}</h3>
                         <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${PLAN_BG[planType]}`}>
                           {PLAN_LABEL[planType]}
                         </span>
@@ -500,7 +500,7 @@ export default function DashboardPage() {
                       <div className="flex flex-wrap gap-2">
                         {booking.start_date && (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-bg-3 text-[11px] text-muted">
-                            <span className="text-white/60">📅</span>
+                            <span className="text-gray-900/60">📅</span>
                             {new Date(booking.start_date).toLocaleDateString("en-IN", { day: "numeric", month: "short" })} — {getEndDate(booking.start_date, booking.duration_months || 1)}
                           </span>
                         )}
@@ -518,12 +518,12 @@ export default function DashboardPage() {
                         <div className="relative hidden sm:block">
                           <ProgressRing percent={progress} size={48} stroke={3} accentClass={`stroke-current ${PLAN_ACCENT[planType]}`} />
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-white text-[10px] font-bold">{progress}%</span>
+                            <span className="text-gray-900 text-[10px] font-bold">{progress}%</span>
                           </div>
                         </div>
                       )}
                       <div className="text-right">
-                        <p className="font-serif text-xl text-white">₹{((plan?.price || 0) * (booking.duration_months || 1)).toLocaleString("en-IN")}</p>
+                        <p className="font-serif text-xl text-gray-900">₹{((plan?.price || 0) * (booking.duration_months || 1)).toLocaleString("en-IN")}</p>
                         <p className="text-muted text-[10px]">total</p>
                       </div>
                     </div>
@@ -536,7 +536,7 @@ export default function DashboardPage() {
                     View profile →
                   </Link>
                   {tp?.phone && (
-                    <a href={`tel:${tp.phone}`} className="text-xs text-muted hover:text-white transition-colors">📞 {tp.phone}</a>
+                    <a href={`tel:${tp.phone}`} className="text-xs text-muted hover:text-gray-900 transition-colors">📞 {tp.phone}</a>
                   )}
                 </div>
               </div>

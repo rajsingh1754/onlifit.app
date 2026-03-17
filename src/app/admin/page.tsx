@@ -4,428 +4,183 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import Link from "next/link";
 
-interface TrainerApplication {
-  id: string;
-  profile_id: string;
-  bio: string;
-  specializations: string[];
-  certifications: string[];
-  experience_years: number;
-  plan_types: string[];
-  cities: string[];
-  is_available: boolean;
-  is_verified: boolean;
-  created_at: string;
-  profiles: {
-    full_name: string;
-    email: string;
-    phone: string;
-    city: string;
-    avatar_url: string | null;
-  };
-}
-
-const PLAN_LABEL: Record<string, string> = {
-  offline: "Onlifit Regular",
-  virtual: "Onlifit Live",
-  elite: "Onlifit Elite",
+const PLAN_LABEL: Record<string, string> = { offline: "Regular", virtual: "Live", elite: "Elite" };
+const PLAN_COLOR: Record<string, string> = { offline: "text-accent", virtual: "text-orange", elite: "text-gold" };
+const STATUS_STYLE: Record<string, string> = {
+  active: "bg-accent/10 text-accent", confirmed: "bg-teal-500/10 text-teal-400",
+  pending: "bg-gold/10 text-gold", completed: "bg-white/5 text-muted", cancelled: "bg-red-500/10 text-red-400",
 };
 
-const PLAN_COLOR: Record<string, string> = {
-  offline: "bg-accent/10 text-accent border-accent/30",
-  virtual: "bg-orange/10 text-orange border-orange/30",
-  elite: "bg-gold/10 text-gold border-gold/30",
-};
-
-interface SupportTicket {
-  id: string;
-  user_id: string;
-  subject: string;
-  message: string;
-  status: string;
-  admin_reply: string | null;
-  created_at: string;
-  profiles: {
-    full_name: string;
-    email: string;
-    avatar_url: string | null;
-  };
-}
-
-export default function AdminDashboard() {
+export default function AdminOverview() {
   const supabase = createClient();
-  const [applications, setApplications] = useState<TrainerApplication[]>([]);
-  const [activeTrainers, setActiveTrainers] = useState<TrainerApplication[]>([]);
+  const [stats, setStats] = useState({ users: 0, active: 0, pending: 0, bookingsMonth: 0, revenue: 0 });
+  const [recentApps, setRecentApps] = useState<any[]>([]);
+  const [recentBookings, setRecentBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"pending" | "active" | "support">("pending");
-  const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [tickets, setTickets] = useState<SupportTicket[]>([]);
-  const [ticketsLoading, setTicketsLoading] = useState(false);
-  const [replyText, setReplyText] = useState<Record<string, string>>({});
-  const [replyingId, setReplyingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchTrainers();
-  }, []);
+  useEffect(() => { fetchOverview(); }, []);
 
-  async function fetchTrainers() {
-    setLoading(true);
+  async function fetchOverview() {
+    const som = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
 
-    const { data: pending } = await supabase
-      .from("trainers")
-      .select("*")
-      .eq("is_available", false)
-      .order("created_at", { ascending: false });
+    const [{ count: uc }, { count: ac }, { count: pc }, { data: mb }, { data: rp }] = await Promise.all([
+      supabase.from("profiles").select("*", { count: "exact", head: true }).eq("role", "user"),
+      supabase.from("trainers").select("*", { count: "exact", head: true }).eq("is_available", true),
+      supabase.from("trainers").select("*", { count: "exact", head: true }).eq("is_available", false),
+      supabase.from("bookings").select("id, status, plans(slug, price)").gte("created_at", som),
+      supabase.from("trainers").select("*").eq("is_available", false).order("created_at", { ascending: false }).limit(5),
+    ]);
 
-    const { data: active } = await supabase
-      .from("trainers")
-      .select("*")
-      .eq("is_available", true)
-      .order("created_at", { ascending: false });
+    let revenue = 0;
+    (mb || []).forEach((b: any) => {
+      if (["active", "confirmed"].includes(b.status)) revenue += b.plans?.price || 0;
+    });
 
-    // Fetch profiles for all trainers
-    const allTrainers = [...(pending || []), ...(active || [])];
-    const profileIds = allTrainers.map(t => t.profile_id);
+    setStats({ users: uc || 0, active: ac || 0, pending: pc || 0, bookingsMonth: (mb || []).length, revenue });
 
-    if (profileIds.length > 0) {
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, full_name, email, phone, city, avatar_url")
-        .in("id", profileIds);
+    // Attach profiles to recent apps
+    if (rp && rp.length > 0) {
+      const ids = rp.map((t: any) => t.profile_id);
+      const { data: profiles } = await supabase.from("profiles").select("id, full_name, email, avatar_url").in("id", ids);
+      const pm = new Map((profiles || []).map((p: any) => [p.id, p]));
+      setRecentApps(rp.map((t: any) => ({ ...t, profile: pm.get(t.profile_id) || { full_name: "Unknown", email: "" } })));
+    }
 
-      const profileMap = new Map((profiles || []).map(p => [p.id, p]));
+    // Recent bookings
+    const { data: rb } = await supabase
+      .from("bookings")
+      .select("id, status, created_at, user_id, trainer_id, plans(name, slug)")
+      .order("created_at", { ascending: false }).limit(5);
 
-      const attachProfile = (trainer: TrainerApplication) => ({
-        ...trainer,
-        profiles: profileMap.get(trainer.profile_id) || { full_name: "Unknown", email: "", phone: "", city: "", avatar_url: null },
-      });
-
-      setApplications((pending || []).map(attachProfile));
-      setActiveTrainers((active || []).map(attachProfile));
-    } else {
-      setApplications([]);
-      setActiveTrainers([]);
+    if (rb && rb.length > 0) {
+      const uids = [...new Set(rb.map((b: any) => b.user_id))];
+      const tids = [...new Set(rb.map((b: any) => b.trainer_id))];
+      const [{ data: up }, { data: tr }] = await Promise.all([
+        supabase.from("profiles").select("id, full_name").in("id", uids),
+        supabase.from("trainers").select("id, profile_id").in("id", tids),
+      ]);
+      const uMap = new Map((up || []).map((p: any) => [p.id, p.full_name]));
+      const tpids = (tr || []).map((t: any) => t.profile_id);
+      let tMap = new Map<string, string>();
+      if (tpids.length > 0) {
+        const { data: tp } = await supabase.from("profiles").select("id, full_name").in("id", tpids);
+        const tpMap = new Map((tp || []).map((p: any) => [p.id, p.full_name]));
+        tMap = new Map((tr || []).map((t: any) => [t.id, tpMap.get(t.profile_id) || "Unknown"]));
+      }
+      setRecentBookings(rb.map((b: any) => ({
+        ...b, userName: uMap.get(b.user_id) || "Unknown", trainerName: tMap.get(b.trainer_id) || "Unknown",
+      })));
     }
 
     setLoading(false);
   }
 
-  async function handleApprove(trainerId: string) {
-    setActionLoading(trainerId);
-    await supabase
-      .from("trainers")
-      .update({ is_available: true, is_verified: true })
-      .eq("id", trainerId);
-    await fetchTrainers();
-    setActionLoading(null);
-  }
+  if (loading) return (
+    <div className="flex justify-center py-32">
+      <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
+    </div>
+  );
 
-  async function handleReject(trainerId: string) {
-    setActionLoading(trainerId);
-    await supabase.from("trainers").delete().eq("id", trainerId);
-    await fetchTrainers();
-    setActionLoading(null);
-  }
-
-  async function handleDeactivate(trainerId: string) {
-    setActionLoading(trainerId);
-    await supabase
-      .from("trainers")
-      .update({ is_available: false })
-      .eq("id", trainerId);
-    await fetchTrainers();
-    setActionLoading(null);
-  }
-
-  async function fetchTickets() {
-    setTicketsLoading(true);
-    const { data } = await supabase
-      .from("support_tickets")
-      .select("*, profiles(full_name, email, avatar_url)")
-      .order("created_at", { ascending: false });
-    setTickets((data as SupportTicket[]) || []);
-    setTicketsLoading(false);
-  }
-
-  useEffect(() => {
-    if (tab === "support" && tickets.length === 0) fetchTickets();
-  }, [tab]);
-
-  async function handleReply(ticketId: string) {
-    const text = replyText[ticketId]?.trim();
-    if (!text) return;
-    setReplyingId(ticketId);
-    await supabase
-      .from("support_tickets")
-      .update({ admin_reply: text, status: "replied" })
-      .eq("id", ticketId);
-    setReplyText((prev) => ({ ...prev, [ticketId]: "" }));
-    setReplyingId(null);
-    fetchTickets();
-  }
-
-  async function handleCloseTicket(ticketId: string) {
-    await supabase
-      .from("support_tickets")
-      .update({ status: "closed" })
-      .eq("id", ticketId);
-    fetchTickets();
-  }
+  const kpis = [
+    { label: "Total Users", value: stats.users, color: "text-white", icon: "👥" },
+    { label: "Active Trainers", value: stats.active, color: "text-accent", icon: "💪" },
+    { label: "Pending Apps", value: stats.pending, color: "text-orange", icon: "📋", link: "/admin/applications" },
+    { label: "Bookings (Month)", value: stats.bookingsMonth, color: "text-teal-400", icon: "📅" },
+    { label: "Revenue (Month)", value: `₹${stats.revenue.toLocaleString("en-IN")}`, color: "text-gold", icon: "💰" },
+  ];
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <div className="border-b border-border bg-bg-2/50 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl text-white">
-            Onli<em className="text-accent italic">fit</em>
-          </Link>
-          <span className="text-xs font-bold text-accent uppercase tracking-wider bg-accent/10 px-3 py-1.5 rounded-full">
-            Admin Dashboard
-          </span>
-        </div>
+    <div>
+      <div className="mb-8">
+        <h1 className="font-serif text-3xl text-white mb-1">Dashboard</h1>
+        <p className="text-muted text-sm">Welcome back. Here&apos;s what&apos;s happening on Onlifit.</p>
       </div>
 
-      <div className="max-w-5xl mx-auto px-5 py-10">
-        <h1 className="font-serif text-3xl text-white mb-2">Trainer Management</h1>
-        <p className="text-muted text-sm mb-8">Review applications, approve trainers, manage the platform.</p>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-muted text-xs mb-1">Pending</p>
-            <p className="text-white font-serif text-2xl">{applications.length}</p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-muted text-xs mb-1">Active Trainers</p>
-            <p className="text-accent font-serif text-2xl">{activeTrainers.length}</p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-muted text-xs mb-1">Open Tickets</p>
-            <p className="text-gold font-serif text-2xl">{tickets.filter(t => t.status === "open").length}</p>
-          </div>
-          <div className="bg-card border border-border rounded-xl p-4">
-            <p className="text-muted text-xs mb-1">Elite</p>
-            <p className="text-gold font-serif text-2xl">{activeTrainers.filter(t => t.plan_types?.includes("elite")).length}</p>
-          </div>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex gap-1 mb-6 bg-bg-2 rounded-xl p-1 w-fit">
-          <button
-            onClick={() => setTab("pending")}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
-              tab === "pending" ? "bg-accent text-bg" : "text-muted hover:text-white"
-            }`}
-          >
-            Pending ({applications.length})
-          </button>
-          <button
-            onClick={() => setTab("active")}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${
-              tab === "active" ? "bg-accent text-bg" : "text-muted hover:text-white"
-            }`}
-          >
-            Active ({activeTrainers.length})
-          </button>
-          <button
-            onClick={() => setTab("support")}
-            className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all relative ${
-              tab === "support" ? "bg-accent text-bg" : "text-muted hover:text-white"
-            }`}
-          >
-            Support
-            {tickets.filter(t => t.status === "open").length > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-orange text-[9px] text-white font-bold rounded-full flex items-center justify-center">
-                {tickets.filter(t => t.status === "open").length}
-              </span>
-            )}
-          </button>
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
-          </div>
-        ) : tab === "support" ? (
-          /* ─── Support Tickets ─── */
-          <div className="space-y-4">
-            {ticketsLoading ? (
-              <div className="flex justify-center py-20">
-                <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
-              </div>
-            ) : tickets.length === 0 ? (
-              <div className="text-center py-16 bg-card border border-border rounded-2xl">
-                <p className="text-3xl mb-3">💬</p>
-                <p className="text-white font-semibold">No support queries</p>
-                <p className="text-muted text-sm mt-1">All clear!</p>
-              </div>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+        {kpis.map((k) => (
+          <div key={k.label} className="bg-card border border-border rounded-2xl p-5 hover:border-white/10 transition-colors group">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-muted text-[11px] uppercase tracking-wider font-semibold">{k.label}</p>
+              <span className="text-lg opacity-50 group-hover:opacity-80 transition-opacity">{k.icon}</span>
+            </div>
+            {k.link ? (
+              <Link href={k.link} className={`font-serif text-2xl ${k.color} hover:underline`}>{k.value}</Link>
             ) : (
-              tickets.map((ticket) => (
-                <div key={ticket.id} className="bg-card border border-border rounded-2xl overflow-hidden">
-                  <div className="p-6">
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      {/* User avatar */}
-                      <div className="w-10 h-10 rounded-full bg-bg-3 border border-border flex items-center justify-center overflow-hidden flex-shrink-0">
-                        {ticket.profiles?.avatar_url ? (
-                          <img src={ticket.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                          <span className="text-muted text-sm">{ticket.profiles?.full_name?.charAt(0) || "U"}</span>
-                        )}
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-wrap items-center gap-2 mb-1">
-                          <h3 className="text-white font-semibold">{ticket.profiles?.full_name || "User"}</h3>
-                          <span className="text-muted text-xs">{ticket.profiles?.email}</span>
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                            ticket.status === "open" ? "bg-gold/10 text-gold" :
-                            ticket.status === "replied" ? "bg-accent/10 text-accent" :
-                            "bg-white/5 text-muted"
-                          }`}>
-                            {ticket.status}
-                          </span>
-                        </div>
-
-                        <h4 className="text-white text-sm font-medium mb-1">{ticket.subject}</h4>
-                        <p className="text-muted text-sm leading-relaxed mb-3">{ticket.message}</p>
-                        <p className="text-muted text-[11px]">
-                          {new Date(ticket.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                        </p>
-
-                        {ticket.admin_reply && (
-                          <div className="mt-3 p-3 bg-accent/5 border border-accent/10 rounded-lg">
-                            <p className="text-accent text-[10px] font-bold uppercase tracking-wider mb-1">Your reply</p>
-                            <p className="text-white text-sm">{ticket.admin_reply}</p>
-                          </div>
-                        )}
-
-                        {/* Reply form */}
-                        {ticket.status !== "closed" && (
-                          <div className="mt-3 flex gap-2">
-                            <input
-                              type="text"
-                              placeholder="Type a reply…"
-                              value={replyText[ticket.id] || ""}
-                              onChange={(e) => setReplyText((prev) => ({ ...prev, [ticket.id]: e.target.value }))}
-                              className="flex-1 px-3 py-2 bg-bg-3 border border-border rounded-lg text-white text-sm placeholder:text-muted/50 focus:outline-none focus:border-accent/40"
-                            />
-                            <button
-                              onClick={() => handleReply(ticket.id)}
-                              disabled={replyingId === ticket.id || !replyText[ticket.id]?.trim()}
-                              className="px-4 py-2 bg-accent text-bg rounded-lg text-xs font-bold hover:bg-accent-dark transition-all disabled:opacity-50"
-                            >
-                              {replyingId === ticket.id ? "…" : "Reply"}
-                            </button>
-                            <button
-                              onClick={() => handleCloseTicket(ticket.id)}
-                              className="px-3 py-2 bg-white/5 text-muted rounded-lg text-xs font-semibold hover:bg-white/10 transition-all"
-                            >
-                              Close
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
+              <p className={`font-serif text-2xl ${k.color}`}>{k.value}</p>
             )}
           </div>
-        ) : (
-          /* ─── Trainer Cards ─── */
-          <div className="space-y-4">
-            {tab === "pending" && applications.length === 0 && (
-              <div className="text-center py-16 bg-card border border-border rounded-2xl">
-                <p className="text-3xl mb-3">✓</p>
-                <p className="text-white font-semibold">No pending applications</p>
-                <p className="text-muted text-sm mt-1">All caught up!</p>
-              </div>
-            )}
+        ))}
+      </div>
 
-            {tab === "active" && activeTrainers.length === 0 && (
-              <div className="text-center py-16 bg-card border border-border rounded-2xl">
-                <p className="text-3xl mb-3">👤</p>
-                <p className="text-white font-semibold">No active trainers</p>
-                <p className="text-muted text-sm mt-1">Approve applications to add trainers.</p>
-              </div>
-            )}
-
-            {(tab === "pending" ? applications : activeTrainers).map((trainer) => (
-              <div key={trainer.id} className="bg-card border border-border rounded-2xl p-6">
-                <div className="flex flex-col sm:flex-row gap-5">
-                  <div className="w-16 h-16 rounded-full bg-bg-3 flex items-center justify-center overflow-hidden flex-shrink-0">
-                    {trainer.profiles?.avatar_url ? (
-                      <img src={trainer.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-muted text-xl">👤</span>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="text-white font-semibold text-lg">{trainer.profiles?.full_name || "Unknown"}</h3>
-                      {trainer.plan_types?.map((pt) => (
-                        <span key={pt} className={`px-2 py-0.5 rounded-md text-[11px] font-bold border ${PLAN_COLOR[pt] || "text-muted border-border"}`}>
-                          {PLAN_LABEL[pt] || pt}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted mb-3">
-                      <span>📧 {trainer.profiles?.email}</span>
-                      <span>📞 {trainer.profiles?.phone || "—"}</span>
-                      <span>📍 {trainer.profiles?.city || trainer.cities?.[0] || "—"}</span>
-                      <span>💼 {trainer.experience_years}y exp</span>
-                      <span>📅 {new Date(trainer.created_at).toLocaleDateString("en-IN")}</span>
-                    </div>
-                    {trainer.bio && (
-                      <p className="text-muted text-sm leading-relaxed mb-3 line-clamp-2">{trainer.bio}</p>
-                    )}
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {trainer.specializations?.map((s) => (
-                        <span key={s} className="px-2 py-0.5 bg-bg-3 border border-border rounded text-[11px] text-muted">{s}</span>
-                      ))}
-                    </div>
-                    {trainer.certifications?.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        {trainer.certifications.map((c) => (
-                          <span key={c} className="px-2 py-0.5 bg-accent/10 border border-accent/20 rounded text-[11px] text-accent">{c}</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex sm:flex-col gap-2 flex-shrink-0">
-                    {tab === "pending" ? (
-                      <>
-                        <button
-                          onClick={() => handleApprove(trainer.id)}
-                          disabled={actionLoading === trainer.id}
-                          className="px-5 py-2.5 bg-accent text-bg rounded-lg text-xs font-bold hover:bg-accent-dark transition-all disabled:opacity-50"
-                        >
-                          {actionLoading === trainer.id ? "..." : "✓ Approve"}
-                        </button>
-                        <button
-                          onClick={() => handleReject(trainer.id)}
-                          disabled={actionLoading === trainer.id}
-                          className="px-5 py-2.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-xs font-bold hover:bg-red-500/20 transition-all disabled:opacity-50"
-                        >
-                          ✗ Reject
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        onClick={() => handleDeactivate(trainer.id)}
-                        disabled={actionLoading === trainer.id}
-                        className="px-5 py-2.5 bg-orange/10 text-orange border border-orange/20 rounded-lg text-xs font-bold hover:bg-orange/20 transition-all disabled:opacity-50"
-                      >
-                        Deactivate
-                      </button>
-                    )}
-                  </div>
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Recent Applications */}
+        <div className="bg-card border border-border rounded-2xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+            <h2 className="text-white font-semibold text-sm">Recent Applications</h2>
+            <Link href="/admin/applications" className="text-accent text-xs font-medium hover:underline">View all →</Link>
+          </div>
+          <div className="divide-y divide-border">
+            {recentApps.length === 0 ? (
+              <div className="p-10 text-center text-muted text-sm">No pending applications</div>
+            ) : recentApps.map((app: any) => (
+              <Link key={app.id} href="/admin/applications" className="px-5 py-3.5 flex items-center gap-3 hover:bg-white/[0.02] transition-colors">
+                <div className="w-9 h-9 rounded-full bg-bg-3 border border-border flex items-center justify-center text-muted text-xs overflow-hidden flex-shrink-0">
+                  {app.profile.avatar_url ? (
+                    <img src={app.profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                  ) : (app.profile.full_name?.charAt(0) || "?")}
                 </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-sm font-medium truncate">{app.profile.full_name}</p>
+                  <p className="text-muted text-[11px] truncate">{app.profile.email} · {app.experience_years}y exp</p>
+                </div>
+                <div className="flex gap-1.5">
+                  {app.plan_types?.map((pt: string) => (
+                    <span key={pt} className={`text-[10px] font-bold ${PLAN_COLOR[pt] || "text-muted"}`}>
+                      {PLAN_LABEL[pt] || pt}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Recent Bookings */}
+        <div className="bg-card border border-border rounded-2xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+            <h2 className="text-white font-semibold text-sm">Recent Bookings</h2>
+            <Link href="/admin/bookings" className="text-accent text-xs font-medium hover:underline">View all →</Link>
+          </div>
+          <div className="divide-y divide-border">
+            {recentBookings.length === 0 ? (
+              <div className="p-10 text-center text-muted text-sm">No bookings yet</div>
+            ) : recentBookings.map((b: any) => (
+              <div key={b.id} className="px-5 py-3.5 flex items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-sm font-medium truncate">{b.userName}</p>
+                  <p className="text-muted text-[11px]">with {b.trainerName} · {b.plans?.name || "—"}</p>
+                </div>
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${STATUS_STYLE[b.status] || "bg-white/5 text-muted"}`}>
+                  {b.status}
+                </span>
               </div>
             ))}
           </div>
-        )}
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link href="/admin/applications" className="px-5 py-2.5 bg-accent/10 text-accent border border-accent/20 rounded-xl text-xs font-bold hover:bg-accent/20 transition-all">
+          📋 Review Applications
+        </Link>
+        <Link href="/admin/trainers" className="px-5 py-2.5 bg-white/5 text-white border border-border rounded-xl text-xs font-bold hover:bg-white/10 transition-all">
+          💪 Manage Trainers
+        </Link>
+        <Link href="/admin/bookings" className="px-5 py-2.5 bg-white/5 text-white border border-border rounded-xl text-xs font-bold hover:bg-white/10 transition-all">
+          📅 View All Bookings
+        </Link>
       </div>
     </div>
   );

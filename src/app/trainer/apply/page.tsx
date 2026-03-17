@@ -77,6 +77,7 @@ function TrainerApplyContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState<"male" | "female">("male");
   const [city, setCity] = useState("Hyderabad");
 
   // Step 1: Profile
@@ -133,6 +134,7 @@ function TrainerApplyContent() {
           full_name: fullName,
           phone,
           city,
+          gender,
           role: "trainer",
         });
 
@@ -322,6 +324,23 @@ function TrainerApplyContent() {
                   placeholder="+91 XXXXX XXXXX"
                   className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-accent/40"
                 />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">Gender</label>
+                <div className="flex gap-3">
+                  {(["male", "female"] as const).map((g) => (
+                    <button
+                      key={g}
+                      type="button"
+                      onClick={() => setGender(g)}
+                      className={`flex-1 py-3 rounded-xl text-sm font-semibold border transition-all capitalize ${
+                        gender === g ? "bg-accent/10 border-accent/40 text-accent" : "bg-bg-3 border-border text-muted hover:text-white"
+                      }`}
+                    >
+                      {g === "male" ? "♂ Male" : "♀ Female"}
+                    </button>
+                  ))}
+                </div>
               </div>
               <div>
                 <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">City</label>

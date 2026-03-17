@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import dynamic from "next/dynamic";
+
+const SupportChat = dynamic(() => import("@/components/SupportChat"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "Onlifit — Real Training. Real Results.",
@@ -15,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased min-h-screen">
         {children}
+        <SupportChat />
       </body>
     </html>
   );

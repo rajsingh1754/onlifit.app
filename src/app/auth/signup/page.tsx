@@ -2,12 +2,20 @@
 
 export const dynamic = "force-dynamic";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SignupPage() {
+  return (
+    <Suspense>
+      <SignupContent />
+    </Suspense>
+  );
+}
+
+function SignupContent() {
   const [step, setStep] = useState(1);
   const [role, setRole] = useState<"user" | "trainer">("user");
   const [fullName, setFullName] = useState("");
@@ -18,6 +26,7 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   async function handleSignup(e: React.FormEvent) {
@@ -47,7 +56,8 @@ export default function SignupPage() {
         .eq("id", data.user.id);
     }
 
-    router.push("/dashboard");
+    const redirectTo = searchParams.get("redirect") || "/dashboard";
+    router.push(redirectTo);
     router.refresh();
   }
 

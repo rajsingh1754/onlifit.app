@@ -47,7 +47,7 @@ create table public.trainers (
   experience_years int default 0,
   rating numeric(2,1) default 0.0,
   total_reviews int default 0,
-  plan_types text[] default '{}',
+  plan_types text[] default '{}', -- single value array: one of 'offline', 'virtual', 'elite'
   cities text[] default '{}',
   is_verified boolean default false,
   is_available boolean default true,
@@ -61,6 +61,9 @@ create policy "Trainers are viewable by everyone"
 
 create policy "Trainers can update own record"
   on trainers for update using (auth.uid() = profile_id);
+
+create policy "Users can create own trainer record"
+  on trainers for insert with check (auth.uid() = profile_id);
 
 -- Plans
 create table public.plans (
@@ -89,6 +92,8 @@ create table public.bookings (
   plan_id uuid references public.plans on delete cascade not null,
   status text not null default 'pending' check (status in ('pending', 'confirmed', 'active', 'completed', 'cancelled')),
   start_date date,
+  duration_months int default 1,
+  time_preference text default '' check (time_preference in ('', 'morning', 'afternoon', 'evening')),
   created_at timestamptz default now()
 );
 
@@ -123,6 +128,32 @@ create policy "Reviews are viewable by everyone"
 
 create policy "Users can create reviews"
   on reviews for insert with check (auth.uid() = user_id);
+
+-- Trainer weekly slots (set by trainer during profile creation)
+create table public.trainer_slots (
+  id uuid default gen_random_uuid() primary key,
+  trainer_id uuid references public.trainers on delete cascade not null,
+  day text not null check (day in ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')),
+  time text not null,
+  is_available boolean default true,
+  created_at timestamptz default now(),
+  unique(trainer_id, day, time)
+);
+
+alter table public.trainer_slots enable row level security;
+
+create policy "Slots are viewable by everyone"
+  on trainer_slots for select using (true);
+
+create policy "Trainers can manage own slots"
+  on trainer_slots for all using (
+    auth.uid() in (select profile_id from trainers where id = trainer_slots.trainer_id)
+  );
+
+create policy "Trainers can insert own slots"
+  on trainer_slots for insert with check (
+    auth.uid() in (select profile_id from trainers where id = trainer_slots.trainer_id)
+  );
 
 -- Trainer view with profile info (for browsing)
 create or replace view public.trainer_profiles as

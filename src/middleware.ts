@@ -31,21 +31,30 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   // Protected routes
-  const protectedPaths = ["/dashboard", "/booking", "/trainers"];
+  const protectedPaths = ["/dashboard", "/booking", "/admin"];
   const isProtected = protectedPaths.some((p) => request.nextUrl.pathname.startsWith(p));
 
   if (isProtected && !user) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
+  // Admin route: check role
+  if (user && request.nextUrl.pathname.startsWith("/admin")) {
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
+    if (profile?.role !== "admin") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
   // Redirect logged-in users away from auth pages
   if (user && request.nextUrl.pathname.startsWith("/auth")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    const redirectTo = request.nextUrl.searchParams.get("redirect");
+    return NextResponse.redirect(new URL(redirectTo || "/dashboard", request.url));
   }
 
   return response;
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/booking/:path*", "/trainers/:path*", "/auth/:path*"],
+  matcher: ["/dashboard/:path*", "/booking/:path*", "/auth/:path*", "/admin/:path*"],
 };

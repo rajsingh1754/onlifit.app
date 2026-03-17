@@ -2,17 +2,26 @@
 
 export const dynamic = "force-dynamic";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
+  );
+}
+
+function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   async function handleLogin(e: React.FormEvent) {
@@ -28,7 +37,8 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    const redirectTo = searchParams.get("redirect") || "/dashboard";
+    router.push(redirectTo);
     router.refresh();
   }
 

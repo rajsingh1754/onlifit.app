@@ -172,7 +172,7 @@ export default function TrainersPage() {
                         "bg-gold/10 text-gold"
                       }`}
                     >
-                      {plan}
+                      {plan === "offline" ? "Onlifit Regular" : plan === "virtual" ? "Onlifit Live" : plan === "elite" ? "Onlifit Elite" : plan}
                     </span>
                   ))}
                 </div>

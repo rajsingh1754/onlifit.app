@@ -53,6 +53,14 @@ export interface Booking {
   plan?: Plan;
 }
 
+export interface TrainerSlot {
+  id: string;
+  trainer_id: string;
+  day: string; // 'monday' | 'tuesday' | ...
+  time: string; // '06:00' | '07:00' | ...
+  is_available: boolean;
+}
+
 export interface Review {
   id: string;
   user_id: string;

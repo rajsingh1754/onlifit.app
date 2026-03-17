@@ -21,6 +21,8 @@ function BookingPage() {
   const router = useRouter();
   const trainerId = searchParams.get("trainer");
   const planId = searchParams.get("plan");
+  const duration = parseInt(searchParams.get("duration") || "1");
+  const timePreference = searchParams.get("time") || "";
 
   const [trainer, setTrainer] = useState<Trainer | null>(null);
   const [plan, setPlan] = useState<Plan | null>(null);
@@ -29,6 +31,12 @@ function BookingPage() {
   const [success, setSuccess] = useState(false);
   const [startDate, setStartDate] = useState("");
   const supabase = createClient();
+
+  const TIME_LABELS: Record<string, string> = {
+    morning: "Morning (6 AM – 10 AM)",
+    afternoon: "Afternoon (12 PM – 4 PM)",
+    evening: "Evening (5 PM – 9 PM)",
+  };
 
   useEffect(() => {
     if (trainerId && planId) fetchData();
@@ -59,6 +67,8 @@ function BookingPage() {
       trainer_id: trainerId,
       plan_id: planId,
       start_date: startDate,
+      duration_months: duration,
+      time_preference: timePreference,
       status: "pending",
     });
 
@@ -152,13 +162,31 @@ function BookingPage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-white font-semibold">{plan.name}</p>
-              <p className="text-muted text-sm">{plan.sessions_per_month} sessions · {plan.schedule}</p>
+              <p className="text-muted text-sm">{plan.sessions_per_month} sessions/mo · {plan.schedule}</p>
             </div>
             <div className="text-right">
-              <p className="font-serif text-2xl text-white">₹{plan.price.toLocaleString("en-IN")}</p>
-              <p className="text-muted text-xs">per month</p>
+              <p className="font-serif text-2xl text-white">₹{(plan.price * duration).toLocaleString("en-IN")}</p>
+              <p className="text-muted text-xs">{duration} {duration === 1 ? "month" : "months"}</p>
             </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-3 mb-4 pt-4 border-t border-border">
+            <div className="bg-bg-3 rounded-xl p-3">
+              <p className="text-[11px] text-muted uppercase tracking-wider mb-1">Time Slot</p>
+              <p className="text-white text-sm font-semibold">{TIME_LABELS[timePreference] || timePreference}</p>
+            </div>
+            <div className="bg-bg-3 rounded-xl p-3">
+              <p className="text-[11px] text-muted uppercase tracking-wider mb-1">Duration</p>
+              <p className="text-white text-sm font-semibold">{duration} {duration === 1 ? "Month" : "Months"}</p>
+            </div>
+          </div>
+
+          {duration > 1 && (
+            <div className="flex items-center justify-between text-sm pt-3 border-t border-border">
+              <span className="text-muted">₹{plan.price.toLocaleString("en-IN")} × {duration} months</span>
+              <span className="text-accent font-bold">₹{(plan.price * duration).toLocaleString("en-IN")} total</span>
+            </div>
+          )}
 
           <ul className="space-y-1.5 pt-4 border-t border-border">
             {plan.features?.map((feat) => (
@@ -190,7 +218,7 @@ function BookingPage() {
           disabled={booking || !startDate}
           className="w-full py-4 bg-accent text-bg font-extrabold text-[15px] rounded-xl hover:bg-accent-dark transition-all disabled:opacity-50"
         >
-          {booking ? "Confirming..." : `Confirm booking · ₹${plan.price.toLocaleString("en-IN")}/mo`}
+          {booking ? "Confirming..." : `Confirm booking · ₹${(plan.price * duration).toLocaleString("en-IN")}`}
         </button>
         <p className="text-center text-white/20 text-xs mt-3">Payment integration coming soon. Booking is confirmed immediately.</p>
       </div>

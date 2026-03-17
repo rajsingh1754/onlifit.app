@@ -44,7 +44,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Sidebar */}
         <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-card border-r border-border flex flex-col transition-transform duration-200 lg:translate-x-0 ${mobileOpen ? "translate-x-0" : "-translate-x-full"}`}>
           <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-            <Link href="/" className="font-serif text-xl text-white">Onli<em className="gradient-text italic">fit</em></Link>
+            <Link href="/" className="text-xl font-bold text-white">Onli<em className="gradient-text italic">fit</em></Link>
             <span className="text-[9px] font-bold text-pink uppercase tracking-widest bg-pink/10 px-2 py-1 rounded-full">Admin</span>
           </div>
 
@@ -81,7 +81,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="flex-1 lg:ml-60 min-h-screen">
           <div className="lg:hidden sticky top-0 z-30 bg-card/80 backdrop-blur-xl border-b border-border px-4 py-3 flex items-center gap-3">
             <button onClick={() => setMobileOpen(true)} className="text-white text-xl">☰</button>
-            <span className="font-serif text-lg text-white">Onli<em className="gradient-text italic">fit</em></span>
+            <span className="text-lg font-bold text-white">Onli<em className="gradient-text italic">fit</em></span>
             <span className="text-[9px] font-bold text-pink uppercase tracking-widest bg-pink/10 px-2 py-1 rounded-full ml-auto">Admin</span>
           </div>
           <main className="p-5 lg:p-8 max-w-6xl">{children}</main>

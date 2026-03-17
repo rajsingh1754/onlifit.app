@@ -107,7 +107,7 @@ export default function ApplicationsPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-serif text-3xl text-white mb-1">Applications</h1>
+        <h1 className="text-3xl font-bold text-white mb-1">Applications</h1>
         <p className="text-muted text-sm">{apps.length} pending application{apps.length !== 1 ? "s" : ""} to review</p>
       </div>
 

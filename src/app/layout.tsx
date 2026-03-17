@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import nextDynamic from "next/dynamic";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
+});
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased min-h-screen">
+      <body className={`${poppins.className} antialiased min-h-screen`}>
         {children}
         <SupportChat />
       </body>

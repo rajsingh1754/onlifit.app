@@ -50,7 +50,7 @@ export default function TrainerPendingPage() {
 
       <div className="w-full max-w-[480px] relative z-10">
         <Link href="/" className="block text-center mb-10">
-          <span className="font-serif text-3xl text-white">
+          <span className="text-3xl font-bold text-white">
             Onli<em className="gradient-text italic">fit</em>
           </span>
         </Link>
@@ -59,7 +59,7 @@ export default function TrainerPendingPage() {
           <div className="w-20 h-20 rounded-full bg-gold/10 flex items-center justify-center text-4xl mx-auto mb-6">
             ⏳
           </div>
-          <h1 className="font-serif text-3xl text-white mb-3">Application Under Review</h1>
+          <h1 className="text-3xl font-bold text-white mb-3">Application Under Review</h1>
           <p className="text-gray-400 text-[15px] leading-relaxed max-w-md mx-auto mb-8">
             Your trainer application is being reviewed by our team. You&apos;ll receive access to your trainer dashboard once approved. This usually takes 24–48 hours.
           </p>

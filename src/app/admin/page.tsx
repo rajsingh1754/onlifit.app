@@ -92,7 +92,7 @@ export default function AdminOverview() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-serif text-3xl text-white mb-1">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-white mb-1">Dashboard</h1>
         <p className="text-muted text-sm">Welcome back. Here&apos;s what&apos;s happening on Onlifit.</p>
       </div>
 
@@ -105,9 +105,9 @@ export default function AdminOverview() {
               <span className="text-lg opacity-50 group-hover:opacity-80 transition-opacity">{k.icon}</span>
             </div>
             {k.link ? (
-              <Link href={k.link} className={`font-serif text-2xl ${k.color} hover:underline`}>{k.value}</Link>
+              <Link href={k.link} className={`text-2xl font-bold ${k.color} hover:underline`}>{k.value}</Link>
             ) : (
-              <p className={`font-serif text-2xl ${k.color}`}>{k.value}</p>
+              <p className={`text-2xl font-bold ${k.color}`}>{k.value}</p>
             )}
           </div>
         ))}

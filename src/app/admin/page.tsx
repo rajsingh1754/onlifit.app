@@ -70,20 +70,43 @@ export default function AdminDashboard() {
 
   async function fetchTrainers() {
     setLoading(true);
+
     const { data: pending } = await supabase
       .from("trainers")
-      .select("*, profiles!trainers_profile_id_fkey(full_name, email, phone, city, avatar_url)")
+      .select("*")
       .eq("is_available", false)
       .order("created_at", { ascending: false });
 
     const { data: active } = await supabase
       .from("trainers")
-      .select("*, profiles!trainers_profile_id_fkey(full_name, email, phone, city, avatar_url)")
+      .select("*")
       .eq("is_available", true)
       .order("created_at", { ascending: false });
 
-    setApplications((pending as TrainerApplication[]) || []);
-    setActiveTrainers((active as TrainerApplication[]) || []);
+    // Fetch profiles for all trainers
+    const allTrainers = [...(pending || []), ...(active || [])];
+    const profileIds = allTrainers.map(t => t.profile_id);
+
+    if (profileIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, full_name, email, phone, city, avatar_url")
+        .in("id", profileIds);
+
+      const profileMap = new Map((profiles || []).map(p => [p.id, p]));
+
+      const attachProfile = (trainer: TrainerApplication) => ({
+        ...trainer,
+        profiles: profileMap.get(trainer.profile_id) || { full_name: "Unknown", email: "", phone: "", city: "", avatar_url: null },
+      });
+
+      setApplications((pending || []).map(attachProfile));
+      setActiveTrainers((active || []).map(attachProfile));
+    } else {
+      setApplications([]);
+      setActiveTrainers([]);
+    }
+
     setLoading(false);
   }
 

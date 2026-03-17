@@ -57,8 +57,8 @@ export default function HomePage() {
     <div className="min-h-screen bg-bg">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5%] h-[70px] bg-bg-2/80 backdrop-blur-xl border-b border-border">
-        <div className="font-serif text-[28px] text-white">
-          Onli<em className="gradient-text italic">fit</em>
+        <div className="text-[28px] font-extrabold tracking-tight text-white">
+          ONLI<span className="gradient-text">FIT</span>
         </div>
         <div className="hidden md:flex gap-8">
           <a href="#how" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">How it works</a>
@@ -472,8 +472,8 @@ export default function HomePage() {
       {/* ════════════ FOOTER ════════════ */}
       <footer className="px-[5%] py-12 border-t border-border bg-bg-2">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="font-serif text-xl text-white">
-            Onli<em className="gradient-text italic">fit</em>
+          <div className="text-xl font-extrabold tracking-tight text-white">
+            ONLI<span className="gradient-text">FIT</span>
           </div>
           <div className="flex gap-6 text-sm text-gray-500">
             <a href="#how" className="hover:text-white transition-colors">How it works</a>

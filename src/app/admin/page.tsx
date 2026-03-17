@@ -5,10 +5,10 @@ import { createClient } from "@/lib/supabase-browser";
 import Link from "next/link";
 
 const PLAN_LABEL: Record<string, string> = { offline: "Regular", virtual: "Live", elite: "Elite" };
-const PLAN_COLOR: Record<string, string> = { offline: "text-accent", virtual: "text-orange", elite: "text-gold" };
+const PLAN_COLOR: Record<string, string> = { offline: "text-pink", virtual: "text-orange", elite: "text-gold" };
 const STATUS_STYLE: Record<string, string> = {
-  active: "bg-accent/10 text-accent", confirmed: "bg-teal-500/10 text-teal-400",
-  pending: "bg-gold/10 text-gold", completed: "bg-gray-50 text-muted", cancelled: "bg-red-500/10 text-red-400",
+  active: "bg-pink/10 text-pink", confirmed: "bg-teal-500/10 text-teal-400",
+  pending: "bg-gold/10 text-gold", completed: "bg-white/5 text-muted", cancelled: "bg-red-500/10 text-red-400",
 };
 
 export default function AdminOverview() {
@@ -77,13 +77,13 @@ export default function AdminOverview() {
 
   if (loading) return (
     <div className="flex justify-center py-32">
-      <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
+      <div className="animate-spin w-8 h-8 border-2 border-pink border-t-transparent rounded-full" />
     </div>
   );
 
   const kpis = [
-    { label: "Total Users", value: stats.users, color: "text-gray-900", icon: "👥" },
-    { label: "Active Trainers", value: stats.active, color: "text-accent", icon: "💪" },
+    { label: "Total Users", value: stats.users, color: "text-white", icon: "👥" },
+    { label: "Active Trainers", value: stats.active, color: "text-pink", icon: "💪" },
     { label: "Pending Apps", value: stats.pending, color: "text-orange", icon: "📋", link: "/admin/applications" },
     { label: "Bookings (Month)", value: stats.bookingsMonth, color: "text-teal-400", icon: "📅" },
     { label: "Revenue (Month)", value: `₹${stats.revenue.toLocaleString("en-IN")}`, color: "text-gold", icon: "💰" },
@@ -92,14 +92,14 @@ export default function AdminOverview() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-serif text-3xl text-gray-900 mb-1">Dashboard</h1>
+        <h1 className="font-serif text-3xl text-white mb-1">Dashboard</h1>
         <p className="text-muted text-sm">Welcome back. Here&apos;s what&apos;s happening on Onlifit.</p>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
         {kpis.map((k) => (
-          <div key={k.label} className="bg-white shadow-sm border border-gray-100 rounded-2xl p-5 hover:border-white/10 transition-colors group">
+          <div key={k.label} className="glass-card rounded-2xl p-5 hover:border-white/20 transition-colors group">
             <div className="flex items-center justify-between mb-3">
               <p className="text-muted text-[11px] uppercase tracking-wider font-semibold">{k.label}</p>
               <span className="text-lg opacity-50 group-hover:opacity-80 transition-opacity">{k.icon}</span>
@@ -115,23 +115,23 @@ export default function AdminOverview() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Recent Applications */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
-          <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-            <h2 className="text-gray-900 font-semibold text-sm">Recent Applications</h2>
-            <Link href="/admin/applications" className="text-accent text-xs font-medium hover:underline">View all →</Link>
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+            <h2 className="text-white font-semibold text-sm">Recent Applications</h2>
+            <Link href="/admin/applications" className="text-pink text-xs font-medium hover:underline">View all →</Link>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-white/10">
             {recentApps.length === 0 ? (
               <div className="p-10 text-center text-muted text-sm">No pending applications</div>
             ) : recentApps.map((app: any) => (
-              <Link key={app.id} href="/admin/applications" className="px-5 py-3.5 flex items-center gap-3 hover:bg-gray-50 transition-colors">
-                <div className="w-9 h-9 rounded-full bg-bg-3 border border-border flex items-center justify-center text-muted text-xs overflow-hidden flex-shrink-0">
+              <Link key={app.id} href="/admin/applications" className="px-5 py-3.5 flex items-center gap-3 hover:bg-white/5 transition-colors">
+                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted text-xs overflow-hidden flex-shrink-0">
                   {app.profile.avatar_url ? (
                     <img src={app.profile.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (app.profile.full_name?.charAt(0) || "?")}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-gray-900 text-sm font-medium truncate">{app.profile.full_name}</p>
+                  <p className="text-white text-sm font-medium truncate">{app.profile.full_name}</p>
                   <p className="text-muted text-[11px] truncate">{app.profile.email} · {app.experience_years}y exp</p>
                 </div>
                 <div className="flex gap-1.5">
@@ -147,21 +147,21 @@ export default function AdminOverview() {
         </div>
 
         {/* Recent Bookings */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
-          <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-            <h2 className="text-gray-900 font-semibold text-sm">Recent Bookings</h2>
-            <Link href="/admin/bookings" className="text-accent text-xs font-medium hover:underline">View all →</Link>
+        <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+            <h2 className="text-white font-semibold text-sm">Recent Bookings</h2>
+            <Link href="/admin/bookings" className="text-pink text-xs font-medium hover:underline">View all →</Link>
           </div>
-          <div className="divide-y divide-border">
+          <div className="divide-y divide-white/10">
             {recentBookings.length === 0 ? (
               <div className="p-10 text-center text-muted text-sm">No bookings yet</div>
             ) : recentBookings.map((b: any) => (
               <div key={b.id} className="px-5 py-3.5 flex items-center gap-3">
                 <div className="flex-1 min-w-0">
-                  <p className="text-gray-900 text-sm font-medium truncate">{b.userName}</p>
+                  <p className="text-white text-sm font-medium truncate">{b.userName}</p>
                   <p className="text-muted text-[11px]">with {b.trainerName} · {b.plans?.name || "—"}</p>
                 </div>
-                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${STATUS_STYLE[b.status] || "bg-gray-50 text-muted"}`}>
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${STATUS_STYLE[b.status] || "bg-white/5 text-muted"}`}>
                   {b.status}
                 </span>
               </div>
@@ -172,13 +172,13 @@ export default function AdminOverview() {
 
       {/* Quick Actions */}
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/admin/applications" className="px-5 py-2.5 bg-accent/10 text-accent border border-accent/20 rounded-xl text-xs font-bold hover:bg-accent/20 transition-all">
+        <Link href="/admin/applications" className="px-5 py-2.5 bg-pink/10 text-pink border border-pink/20 rounded-xl text-xs font-bold hover:bg-pink/20 transition-all">
           📋 Review Applications
         </Link>
-        <Link href="/admin/trainers" className="px-5 py-2.5 bg-gray-50 text-gray-900 border border-border rounded-xl text-xs font-bold hover:bg-gray-100 transition-all">
+        <Link href="/admin/trainers" className="px-5 py-2.5 bg-white/5 text-white border border-white/10 rounded-xl text-xs font-bold hover:bg-white/10 transition-all">
           💪 Manage Trainers
         </Link>
-        <Link href="/admin/bookings" className="px-5 py-2.5 bg-gray-50 text-gray-900 border border-border rounded-xl text-xs font-bold hover:bg-gray-100 transition-all">
+        <Link href="/admin/bookings" className="px-5 py-2.5 bg-white/5 text-white border border-white/10 rounded-xl text-xs font-bold hover:bg-white/10 transition-all">
           📅 View All Bookings
         </Link>
       </div>

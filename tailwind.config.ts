@@ -9,18 +9,31 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: { DEFAULT: "#FFFFFF", 2: "#F8FAFC", 3: "#F1F5F9" },
-        card: "#FFFFFF",
-        accent: { DEFAULT: "#4F46E5", dark: "#4338CA" },
-        orange: "#F97316",
+        // Dark theme colors inspired by cult.fit
+        bg: { DEFAULT: "#0F0F13", 2: "#171A26", 3: "#1E2235" },
+        card: "#1A1D2E",
+        accent: { DEFAULT: "#FF3278", dark: "#E02A6A", light: "#FF5A93" },
+        yellow: "#FFDB17",
+        pink: "#FF3278",
+        blue: "#3888FF",
         teal: "#14B8A6",
-        gold: "#F59E0B",
-        muted: "#64748B",
-        border: { DEFAULT: "#E2E8F0", 2: "#CBD5E1" },
+        gold: "#F8BA00",
+        muted: "#9CA3AF",
+        border: { DEFAULT: "#2A2D3E", 2: "#3A3D4E" },
+        glass: "rgba(255, 255, 255, 0.05)",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        serif: ["Playfair Display", "serif"],
+        sans: ["Poppins", "sans-serif"],
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-accent': 'linear-gradient(135deg, #FFDB17 0%, #FF3278 100%)',
+        'gradient-card': 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+      },
+      boxShadow: {
+        'glow-pink': '0 0 60px rgba(255, 50, 120, 0.3)',
+        'glow-yellow': '0 0 60px rgba(255, 219, 23, 0.3)',
+        'glow-blue': '0 0 60px rgba(56, 136, 255, 0.3)',
       },
     },
   },

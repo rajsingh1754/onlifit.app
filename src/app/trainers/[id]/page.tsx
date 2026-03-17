@@ -87,7 +87,7 @@ export default function TrainerDetailPage() {
         .eq("trainer_id", id)
         .in("status", ["active", "confirmed", "pending"])
         .not("booked_slot", "is", null);
-      
+
       const taken = new Set<string>();
       (bookedData || []).forEach((b: BookedSlot) => {
         if (b.booked_slot) taken.add(b.booked_slot);
@@ -157,7 +157,7 @@ export default function TrainerDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-bg">
         <div className="text-muted">Loading trainer...</div>
       </div>
     );
@@ -165,33 +165,37 @@ export default function TrainerDetailPage() {
 
   if (!trainer) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-bg">
         <div className="text-center">
-          <p className="text-gray-900 text-lg mb-2">Trainer not found</p>
-          <Link href="/trainers" className="text-accent text-sm hover:underline">Browse all trainers</Link>
+          <p className="text-white text-lg mb-2">Trainer not found</p>
+          <Link href="/trainers" className="text-pink text-sm hover:underline">Browse all trainers</Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-bg relative overflow-hidden">
+      {/* Decorative blur circles */}
+      <div className="blur-circle pink w-[400px] h-[400px] -top-40 -right-40 opacity-20 fixed" />
+      <div className="blur-circle yellow w-[300px] h-[300px] bottom-40 -left-40 opacity-20 fixed" />
+
       {/* Header */}
-      <div className="border-b border-border bg-bg-2/50 backdrop-blur-xl sticky top-0 z-50">
+      <div className="border-b border-border bg-bg-2/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl text-gray-900">
-            Onli<em className="text-accent italic">fit</em>
+          <Link href="/" className="font-serif text-2xl text-white">
+            Onli<em className="gradient-text italic">fit</em>
           </Link>
-          <Link href="/trainers" className="text-sm text-muted hover:text-gray-900 transition-colors">
+          <Link href="/trainers" className="text-sm text-gray-400 hover:text-white transition-colors">
             ← All trainers
           </Link>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-5 py-12">
+      <div className="max-w-5xl mx-auto px-5 py-12 relative z-10">
         {/* Trainer profile */}
         <div className="flex flex-col md:flex-row gap-8 mb-12">
-          <div className="w-28 h-28 rounded-2xl bg-bg-3 border border-border flex items-center justify-center text-4xl text-muted overflow-hidden flex-shrink-0">
+          <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-pink/20 to-yellow/20 border border-white/10 flex items-center justify-center text-4xl text-white overflow-hidden flex-shrink-0">
             {trainer.avatar_url ? (
               <img src={trainer.avatar_url} alt="" className="w-full h-full object-cover" />
             ) : (
@@ -200,39 +204,39 @@ export default function TrainerDetailPage() {
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="font-serif text-4xl text-gray-900 tracking-tight">{trainer.full_name}</h1>
+              <h1 className="font-serif text-4xl text-white tracking-tight">{trainer.full_name}</h1>
               {trainer.is_verified && (
-                <span className="bg-accent/10 text-accent text-xs font-bold px-2 py-0.5 rounded-full">Verified</span>
+                <span className="bg-pink/10 text-pink text-xs font-bold px-2 py-0.5 rounded-full">Verified</span>
               )}
             </div>
             <div className="flex items-center gap-3 mb-2">
               {trainer.plan_types?.map((pt) => (
                 <span key={pt} className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
-                  pt === "offline" ? "bg-accent/10 text-accent" :
-                  pt === "virtual" ? "bg-orange/10 text-orange" :
-                  "bg-gold/10 text-gold"
+                  pt === "offline" ? "bg-blue/20 text-blue" :
+                  pt === "virtual" ? "bg-pink/20 text-pink" :
+                  "bg-yellow/20 text-yellow"
                 }`}>
                   {PLAN_LABEL[pt] || pt}
                 </span>
               ))}
             </div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="text-gold text-sm">{"★".repeat(Math.round(trainer.rating))}</span>
-              <span className="text-muted text-sm">{trainer.rating} rating · {trainer.total_reviews} reviews</span>
-              <span className="text-muted text-sm">· {trainer.experience_years} years exp</span>
+              <span className="text-yellow text-sm">{"★".repeat(Math.round(trainer.rating))}</span>
+              <span className="text-gray-400 text-sm">{trainer.rating} rating · {trainer.total_reviews} reviews</span>
+              <span className="text-gray-400 text-sm">· {trainer.experience_years} years exp</span>
             </div>
-            <p className="text-muted text-[15px] leading-relaxed max-w-xl mb-4">{trainer.bio}</p>
+            <p className="text-gray-400 text-[15px] leading-relaxed max-w-xl mb-4">{trainer.bio}</p>
 
             <div className="flex flex-wrap gap-2 mb-4">
               {trainer.specializations?.map((spec) => (
-                <span key={spec} className="text-xs font-semibold text-muted bg-bg-3 border border-border rounded-full px-3 py-1">
+                <span key={spec} className="text-xs font-semibold text-gray-300 bg-white/5 border border-white/10 rounded-full px-3 py-1">
                   {spec}
                 </span>
               ))}
             </div>
             <div className="flex flex-wrap gap-2">
               {trainer.certifications?.map((cert) => (
-                <span key={cert} className="text-xs font-semibold text-accent/60 bg-accent/5 border border-accent/10 rounded-full px-3 py-1">
+                <span key={cert} className="text-xs font-semibold text-pink/80 bg-pink/10 border border-pink/20 rounded-full px-3 py-1">
                   {cert}
                 </span>
               ))}
@@ -242,12 +246,12 @@ export default function TrainerDetailPage() {
 
         {/* Available Time Slots */}
         <div className="mb-10">
-          <h2 className="font-serif text-2xl text-gray-900 mb-2">Available Slots</h2>
-          <p className="text-muted text-sm mb-5">Pick an hourly slot — booked slots are shown in red</p>
-          
+          <h2 className="font-serif text-2xl text-white mb-2">Available Slots</h2>
+          <p className="text-gray-400 text-sm mb-5">Pick an hourly slot — booked slots are shown in red</p>
+
           {slots.length === 0 ? (
-            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-8 text-center">
-              <p className="text-muted text-sm">This trainer hasn&apos;t set their availability yet.</p>
+            <div className="glass-card rounded-2xl p-8 text-center">
+              <p className="text-gray-400 text-sm">This trainer hasn&apos;t set their availability yet.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -255,8 +259,8 @@ export default function TrainerDetailPage() {
                 const daySlots = slots.filter((s) => s.day === day);
                 if (daySlots.length === 0) return null;
                 return (
-                  <div key={day} className="bg-white shadow-sm border border-gray-100 rounded-xl p-4">
-                    <h4 className="text-sm font-bold text-gray-900 mb-3 capitalize">{day}</h4>
+                  <div key={day} className="glass-card rounded-xl p-4">
+                    <h4 className="text-sm font-bold text-white mb-3 capitalize">{day}</h4>
                     <div className="flex flex-wrap gap-2">
                       {daySlots.map((s) => {
                         const slotKey = `${s.day}:${s.time}`;
@@ -271,8 +275,8 @@ export default function TrainerDetailPage() {
                               isBooked
                                 ? "bg-red-500/10 text-red-400 border border-red-500/20 cursor-not-allowed line-through"
                                 : isSelected
-                                  ? "bg-accent text-bg ring-2 ring-accent/40"
-                                  : "bg-bg-3 border border-border text-gray-900 hover:border-accent/40"
+                                  ? "btn-gradient ring-2 ring-pink/40"
+                                  : "bg-white/5 border border-white/10 text-white hover:border-pink/40"
                             }`}
                           >
                             {formatTime(s.time)}
@@ -288,8 +292,8 @@ export default function TrainerDetailPage() {
           )}
 
           {selectedSlot && (
-            <div className="mt-4 p-3 bg-accent/10 border border-accent/20 rounded-xl">
-              <p className="text-sm text-accent font-semibold">
+            <div className="mt-4 p-3 bg-pink/10 border border-pink/20 rounded-xl">
+              <p className="text-sm text-pink font-semibold">
                 ✓ Selected: <span className="capitalize">{selectedSlot.split(":")[0]}</span> at {formatTime(selectedSlot.split(":").slice(1).join(":"))}
               </p>
             </div>
@@ -298,8 +302,8 @@ export default function TrainerDetailPage() {
 
         {/* Duration */}
         <div className="mb-10">
-          <h2 className="font-serif text-2xl text-gray-900 mb-2">Duration</h2>
-          <p className="text-muted text-sm mb-5">How long do you want to train?</p>
+          <h2 className="font-serif text-2xl text-white mb-2">Duration</h2>
+          <p className="text-gray-400 text-sm mb-5">How long do you want to train?</p>
           <div className="flex flex-wrap gap-3">
             {DURATION_OPTIONS.map((d) => (
               <button
@@ -307,8 +311,8 @@ export default function TrainerDetailPage() {
                 onClick={() => setSelectedDuration(d.months)}
                 className={`px-6 py-3 rounded-xl text-sm font-bold transition-all ${
                   selectedDuration === d.months
-                    ? "bg-accent text-bg ring-2 ring-accent/40"
-                    : "bg-white shadow-sm border border-gray-100 text-gray-900 hover:border-accent/40"
+                    ? "btn-gradient ring-2 ring-pink/40"
+                    : "glass-card text-white hover:border-pink/30"
                 }`}
               >
                 {d.label}
@@ -319,36 +323,36 @@ export default function TrainerDetailPage() {
 
         {/* Plan & Book */}
         <div className="mb-12">
-          <h2 className="font-serif text-2xl text-gray-900 mb-6">Plan</h2>
+          <h2 className="font-serif text-2xl text-white mb-6">Plan</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {plans.filter((plan) => trainer.plan_types?.includes(plan.slug)).map((plan) => {
               const totalPrice = plan.price * selectedDuration;
               return (
                 <div
                   key={plan.id}
-                  className="bg-white shadow-sm border border-gray-100 hover:border-border-2 rounded-2xl p-6 transition-all"
+                  className="glass-card rounded-2xl p-6 hover:border-pink/30 transition-all"
                 >
                   <span className={`inline-block text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3 ${
-                    plan.slug === "offline" ? "bg-accent/10 text-accent" :
-                    plan.slug === "virtual" ? "bg-orange/10 text-orange" :
-                    "bg-gold/10 text-gold"
+                    plan.slug === "offline" ? "bg-blue/20 text-blue" :
+                    plan.slug === "virtual" ? "bg-pink/20 text-pink" :
+                    "bg-yellow/20 text-yellow"
                   }`}>
                     {PLAN_LABEL[plan.slug] || plan.name}
                   </span>
-                  <div className="font-serif text-3xl text-gray-900 mb-1">
+                  <div className="font-serif text-3xl gradient-text mb-1">
                     <sup className="text-lg">₹</sup>{totalPrice.toLocaleString("en-IN")}
                   </div>
-                  <p className="text-muted text-xs mb-1">
+                  <p className="text-gray-400 text-xs mb-1">
                     {selectedDuration > 1
                       ? `₹${plan.price.toLocaleString("en-IN")}/mo × ${selectedDuration} months`
                       : "per month"}
                   </p>
-                  <p className="text-muted text-xs mb-4">{plan.sessions_per_month} sessions/mo · {plan.schedule}</p>
-                  <div className="border-t border-border pt-4">
+                  <p className="text-gray-500 text-xs mb-4">{plan.sessions_per_month} sessions/mo · {plan.schedule}</p>
+                  <div className="border-t border-white/10 pt-4">
                     <ul className="space-y-2">
                       {plan.features?.map((feat) => (
-                        <li key={feat} className="flex items-start gap-2 text-sm text-gray-900/60">
-                          <span className="text-accent text-xs mt-0.5">✓</span>
+                        <li key={feat} className="flex items-start gap-2 text-sm text-gray-400">
+                          <span className="text-pink text-xs mt-0.5">✓</span>
                           {feat}
                         </li>
                       ))}
@@ -356,7 +360,7 @@ export default function TrainerDetailPage() {
                   </div>
                   <button
                     onClick={() => handleBook(plan.id)}
-                    className="w-full mt-5 py-3 rounded-lg font-bold text-sm transition-all bg-accent text-bg hover:bg-accent-dark"
+                    className="w-full mt-5 py-3 rounded-lg font-bold text-sm transition-all btn-gradient"
                   >
                     Book Trainer{selectedSlot ? "" : " – Select slot first"}
                   </button>
@@ -369,7 +373,7 @@ export default function TrainerDetailPage() {
         {/* Rating Overview */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-serif text-2xl text-gray-900">Ratings & Reviews</h2>
+            <h2 className="font-serif text-2xl text-white">Ratings & Reviews</h2>
             <button
               onClick={() => {
                 if (!currentUser) {
@@ -378,19 +382,19 @@ export default function TrainerDetailPage() {
                   setShowReviewForm(!showReviewForm);
                 }
               }}
-              className="px-4 py-2 rounded-lg text-sm font-bold bg-accent text-bg hover:bg-accent-dark transition-all"
+              className="px-4 py-2 rounded-lg text-sm font-bold btn-gradient transition-all"
             >
               Write a review
             </button>
           </div>
 
           {/* Rating summary */}
-          <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 mb-6">
+          <div className="glass-card rounded-2xl p-6 mb-6">
             <div className="flex items-center gap-6">
               <div className="text-center">
-                <div className="font-serif text-[48px] text-gray-900 leading-none">{trainer.rating}</div>
-                <div className="text-gold text-sm mt-1">{"★".repeat(Math.round(trainer.rating))}</div>
-                <p className="text-muted text-xs mt-1">{trainer.total_reviews} review{trainer.total_reviews !== 1 ? "s" : ""}</p>
+                <div className="font-serif text-[48px] gradient-text leading-none">{trainer.rating}</div>
+                <div className="text-yellow text-sm mt-1">{"★".repeat(Math.round(trainer.rating))}</div>
+                <p className="text-gray-500 text-xs mt-1">{trainer.total_reviews} review{trainer.total_reviews !== 1 ? "s" : ""}</p>
               </div>
               <div className="flex-1">
                 {[5, 4, 3, 2, 1].map((star) => {
@@ -398,12 +402,12 @@ export default function TrainerDetailPage() {
                   const pct = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
                   return (
                     <div key={star} className="flex items-center gap-2 mb-1">
-                      <span className="text-xs text-muted w-3">{star}</span>
-                      <span className="text-gold text-xs">★</span>
-                      <div className="flex-1 h-2 bg-bg-3 rounded-full overflow-hidden">
-                        <div className="h-full bg-gold rounded-full transition-all" style={{ width: `${pct}%` }} />
+                      <span className="text-xs text-gray-500 w-3">{star}</span>
+                      <span className="text-yellow text-xs">★</span>
+                      <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-full bg-yellow rounded-full transition-all" style={{ width: `${pct}%` }} />
                       </div>
-                      <span className="text-xs text-muted w-6 text-right">{count}</span>
+                      <span className="text-xs text-gray-500 w-6 text-right">{count}</span>
                     </div>
                   );
                 })}
@@ -413,38 +417,38 @@ export default function TrainerDetailPage() {
 
           {/* Review form */}
           {showReviewForm && (
-            <div className="bg-card border border-accent/20 rounded-2xl p-6 mb-6">
-              <h3 className="text-gray-900 font-semibold text-sm mb-4">Rate this trainer</h3>
+            <div className="glass-card border-pink/20 rounded-2xl p-6 mb-6">
+              <h3 className="text-white font-semibold text-sm mb-4">Rate this trainer</h3>
               <div className="flex items-center gap-1 mb-4">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     onClick={() => setReviewRating(star)}
-                    className={`text-2xl transition-all ${star <= reviewRating ? "text-gold" : "text-gray-900/15"} hover:scale-110`}
+                    className={`text-2xl transition-all ${star <= reviewRating ? "text-yellow" : "text-white/15"} hover:scale-110`}
                   >
                     ★
                   </button>
                 ))}
-                <span className="text-muted text-sm ml-2">{reviewRating}/5</span>
+                <span className="text-gray-400 text-sm ml-2">{reviewRating}/5</span>
               </div>
               <textarea
                 value={reviewComment}
                 onChange={(e) => setReviewComment(e.target.value)}
                 placeholder="Share your experience with this trainer..."
                 rows={3}
-                className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40 resize-none mb-4"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-pink/40 resize-none mb-4"
               />
               <div className="flex gap-3">
                 <button
                   onClick={handleSubmitReview}
                   disabled={submittingReview || !reviewComment.trim()}
-                  className="px-6 py-2.5 rounded-lg text-sm font-bold bg-accent text-bg hover:bg-accent-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-2.5 rounded-lg text-sm font-bold btn-gradient transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submittingReview ? "Submitting..." : "Submit Review"}
                 </button>
                 <button
                   onClick={() => setShowReviewForm(false)}
-                  className="px-6 py-2.5 rounded-lg text-sm font-medium border border-border text-muted hover:text-gray-900 transition-all"
+                  className="px-6 py-2.5 rounded-lg text-sm font-medium border border-white/10 text-gray-400 hover:text-white transition-all"
                 >
                   Cancel
                 </button>
@@ -456,23 +460,23 @@ export default function TrainerDetailPage() {
           {reviews.length > 0 ? (
             <div className="space-y-4">
               {reviews.map((review) => (
-                <div key={review.id} className="bg-white shadow-sm border border-gray-100 rounded-xl p-5">
+                <div key={review.id} className="glass-card rounded-xl p-5">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-9 h-9 rounded-full bg-bg-3 border border-border flex items-center justify-center text-sm text-muted">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-pink/20 to-yellow/20 border border-white/10 flex items-center justify-center text-sm text-white">
                       {(review.profile as any)?.full_name?.charAt(0) || "U"}
                     </div>
                     <div>
-                      <p className="text-gray-900 text-sm font-semibold">{(review.profile as any)?.full_name}</p>
-                      <span className="text-gold text-xs">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
+                      <p className="text-white text-sm font-semibold">{(review.profile as any)?.full_name}</p>
+                      <span className="text-yellow text-xs">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
                     </div>
                   </div>
-                  <p className="text-muted text-sm leading-relaxed italic">&ldquo;{review.comment}&rdquo;</p>
+                  <p className="text-gray-400 text-sm leading-relaxed italic">&ldquo;{review.comment}&rdquo;</p>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-8 text-center">
-              <p className="text-muted text-sm">No reviews yet. Be the first to rate this trainer!</p>
+            <div className="glass-card rounded-xl p-8 text-center">
+              <p className="text-gray-400 text-sm">No reviews yet. Be the first to rate this trainer!</p>
             </div>
           )}
         </div>

@@ -336,7 +336,7 @@ export default function SupportChat() {
         if (match.index > lastIdx) {
           elements.push(<span key={`${i}-${j}-pre`}>{line.slice(lastIdx, match.index)}</span>);
         }
-        elements.push(<strong key={`${i}-${j}-b`} className="text-gray-900 font-semibold">{match[1]}</strong>);
+        elements.push(<strong key={`${i}-${j}-b`} className="text-white font-semibold">{match[1]}</strong>);
         lastIdx = match.index + match[0].length;
         j++;
       }
@@ -359,8 +359,8 @@ export default function SupportChat() {
         onClick={() => setOpen(!open)}
         className={`fixed bottom-6 right-6 z-[100] w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 ${
           open
-            ? "bg-gray-100 backdrop-blur-xl border border-white/10"
-            : "bg-accent hover:bg-accent-dark shadow-accent/25"
+            ? "bg-bg-2 backdrop-blur-xl border border-border"
+            : "bg-gradient-to-r from-yellow to-pink shadow-pink/25"
         }`}
       >
         {open ? (
@@ -380,19 +380,19 @@ export default function SupportChat() {
       {/* ─── Chat Panel ─── */}
       {open && (
         <div
-          className="fixed bottom-24 right-6 z-[100] w-[380px] max-w-[calc(100vw-3rem)] h-[560px] max-h-[calc(100vh-8rem)] rounded-2xl border border-border bg-bg/95 backdrop-blur-2xl shadow-2xl shadow-gray-200/50 flex flex-col overflow-hidden"
+          className="fixed bottom-24 right-6 z-[100] w-[380px] max-w-[calc(100vw-3rem)] h-[560px] max-h-[calc(100vh-8rem)] rounded-2xl border border-border bg-bg-2/95 backdrop-blur-2xl shadow-2xl shadow-black/50 flex flex-col overflow-hidden"
           style={{ animation: "chatSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
         >
           {/* Header */}
           <div className="px-5 py-4 border-b border-border bg-bg-2/80 flex-shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center">
-                <span className="text-accent text-sm font-bold">AI</span>
+              <div className="w-9 h-9 rounded-full bg-gradient-to-r from-yellow/20 to-pink/20 border border-pink/30 flex items-center justify-center">
+                <span className="gradient-text text-sm font-bold">AI</span>
               </div>
               <div className="flex-1">
-                <h3 className="text-gray-900 font-semibold text-sm">Onlifit Assistant</h3>
+                <h3 className="text-white font-semibold text-sm">Onlifit Assistant</h3>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-pink animate-pulse" />
                   <span className="text-muted text-[11px]">Always online</span>
                 </div>
               </div>
@@ -427,8 +427,8 @@ export default function SupportChat() {
               <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-accent text-bg rounded-br-md"
-                    : "bg-bg-3 border border-border text-gray-900/80 rounded-bl-md"
+                    ? "bg-gradient-to-r from-yellow to-pink text-black rounded-br-md"
+                    : "bg-white/5 border border-white/10 text-gray-300 rounded-bl-md"
                 }`}>
                   {msg.role === "bot" ? renderFormattedText(formatBotText(msg.text)) : msg.text}
                 </div>
@@ -438,11 +438,11 @@ export default function SupportChat() {
             {/* Typing indicator */}
             {isTyping && (
               <div className="flex justify-start">
-                <div className="bg-bg-3 border border-border rounded-2xl rounded-bl-md px-4 py-3">
+                <div className="bg-white/5 border border-white/10 rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex gap-1.5">
-                    <span className="w-2 h-2 bg-accent/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="w-2 h-2 bg-accent/50 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <span className="w-2 h-2 bg-accent/50 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                    <span className="w-2 h-2 bg-pink/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <span className="w-2 h-2 bg-pink/50 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <span className="w-2 h-2 bg-pink/50 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                   </div>
                 </div>
               </div>
@@ -450,12 +450,12 @@ export default function SupportChat() {
 
             {/* Escalation Form */}
             {showEscalation && (
-              <div className="bg-bg-3 border border-accent/20 rounded-2xl p-4">
-                <p className="text-accent text-[11px] font-bold uppercase tracking-widest mb-3">📩 Send to Support Team</p>
+              <div className="bg-white/5 border border-pink/20 rounded-2xl p-4">
+                <p className="text-pink text-[11px] font-bold uppercase tracking-widest mb-3">📩 Send to Support Team</p>
                 {!userId ? (
                   <div className="text-center py-2">
                     <p className="text-muted text-xs mb-2">Please sign in first</p>
-                    <a href="/auth/login" className="text-accent text-xs font-semibold hover:underline">Sign in →</a>
+                    <a href="/auth/login" className="text-pink text-xs font-semibold hover:underline">Sign in →</a>
                   </div>
                 ) : (
                   <form onSubmit={handleEscalation} className="space-y-2.5">
@@ -464,7 +464,7 @@ export default function SupportChat() {
                       placeholder="Subject (e.g. Booking issue)"
                       value={escalationSubject}
                       onChange={(e) => setEscalationSubject(e.target.value)}
-                      className="w-full px-3 py-2 bg-bg border border-border rounded-lg text-gray-900 text-xs placeholder:text-muted/50 focus:outline-none focus:border-accent/30"
+                      className="w-full px-3 py-2 bg-bg border border-white/10 rounded-lg text-white text-xs placeholder:text-gray-600 focus:outline-none focus:border-pink/30"
                       required
                     />
                     <textarea
@@ -486,7 +486,7 @@ export default function SupportChat() {
                       <button
                         type="submit"
                         disabled={sending}
-                        className="flex-1 py-2 bg-accent text-bg text-xs font-bold rounded-lg hover:bg-accent-dark transition-all disabled:opacity-50"
+                        className="flex-1 py-2 btn-gradient text-xs rounded-lg transition-all disabled:opacity-50"
                       >
                         {sending ? "Sending…" : "Send to Support"}
                       </button>
@@ -507,7 +507,7 @@ export default function SupportChat() {
                   <button
                     key={action.label}
                     onClick={() => handleSend(action.query)}
-                    className="px-3 py-1.5 bg-bg-3 border border-border rounded-full text-[11px] text-muted hover:text-gray-900 hover:border-border-2 transition-all"
+                    className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[11px] text-gray-400 hover:text-white hover:border-white/20 transition-all"
                   >
                     {action.label}
                   </button>
@@ -526,12 +526,12 @@ export default function SupportChat() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
                 placeholder="Ask me anything…"
-                className="flex-1 px-3.5 py-2.5 bg-bg-3 border border-border rounded-xl text-gray-900 text-sm placeholder:text-muted/50 focus:outline-none focus:border-accent/30 transition-colors"
+                className="flex-1 px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-pink/30 transition-colors"
               />
               <button
                 onClick={() => handleSend()}
                 disabled={!input.trim() || isTyping}
-                className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center hover:bg-accent-dark transition-all disabled:opacity-30 flex-shrink-0"
+                className="w-10 h-10 bg-gradient-to-r from-yellow to-pink rounded-xl flex items-center justify-center hover:opacity-90 transition-all disabled:opacity-30 flex-shrink-0"
               >
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
                   <path d="M22 2 11 13M22 2l-7 20-4-9-9-4z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

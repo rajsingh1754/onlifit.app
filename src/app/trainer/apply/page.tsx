@@ -248,40 +248,44 @@ function TrainerApplyContent() {
 
   if (!authorized) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" />
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="animate-spin w-8 h-8 border-2 border-pink border-t-transparent rounded-full" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-bg relative overflow-hidden">
+      {/* Blur circle decorations */}
+      <div className="absolute top-20 left-10 w-96 h-96 bg-pink/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-80 h-80 bg-purple/20 rounded-full blur-3xl pointer-events-none" />
+
       {/* Header */}
-      <div className="border-b border-border bg-bg-2/50 backdrop-blur-xl sticky top-0 z-50">
+      <div className="border-b border-white/10 bg-white/5 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Link href="/" className="font-serif text-2xl text-gray-900">
-            Onli<em className="text-accent italic">fit</em>
+          <Link href="/" className="font-serif text-2xl text-white">
+            Onli<em className="gradient-text italic">fit</em>
           </Link>
-          <Link href="/" className="text-sm text-muted hover:text-gray-900 transition-colors">
+          <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors">
             ← Back to home
           </Link>
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-5 py-12">
+      <div className="max-w-2xl mx-auto px-5 py-12 relative z-10">
         {/* Progress */}
         <div className="flex items-center gap-2 mb-10">
           {STEPS.map((s, i) => (
             <div key={s} className="flex items-center gap-2 flex-1">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                i < step ? "bg-accent text-bg" :
-                i === step ? "bg-accent/20 text-accent border border-accent" :
-                "bg-bg-3 text-muted border border-border"
+                i < step ? "btn-gradient text-white" :
+                i === step ? "bg-pink/20 text-pink border border-pink" :
+                "bg-white/5 text-gray-400 border border-white/10"
               }`}>
                 {i < step ? "✓" : i + 1}
               </div>
-              <span className={`text-xs font-medium hidden sm:block ${i <= step ? "text-gray-900" : "text-muted"}`}>{s}</span>
-              {i < STEPS.length - 1 && <div className={`flex-1 h-px ${i < step ? "bg-accent" : "bg-border"}`} />}
+              <span className={`text-xs font-medium hidden sm:block ${i <= step ? "text-white" : "text-gray-400"}`}>{s}</span>
+              {i < STEPS.length - 1 && <div className={`flex-1 h-px ${i < step ? "bg-pink" : "bg-white/10"}`} />}
             </div>
           ))}
         </div>
@@ -289,44 +293,44 @@ function TrainerApplyContent() {
         {/* Step 0: Account */}
         {step === 0 && (
           <div>
-            <h1 className="font-serif text-3xl text-gray-900 mb-2">Join as a Trainer</h1>
-            <p className="text-muted text-sm mb-8">Create your account to get started</p>
+            <h1 className="font-serif text-3xl text-white mb-2">Join as a Trainer</h1>
+            <p className="text-gray-400 text-sm mb-8">Create your account to get started</p>
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">Full Name</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Full Name</label>
                 <input
                   type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}
                   placeholder="Your full name"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-pink/40"
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">Email</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Email</label>
                 <input
                   type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                   placeholder="trainer@example.com"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-pink/40"
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">Password</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Password</label>
                 <input
                   type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                   placeholder="Min 6 characters"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-pink/40"
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">Phone</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Phone</label>
                 <input
                   type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
                   placeholder="+91 XXXXX XXXXX"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-pink/40"
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">Gender</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Gender</label>
                 <div className="flex gap-3">
                   {(["male", "female"] as const).map((g) => (
                     <button
@@ -334,7 +338,7 @@ function TrainerApplyContent() {
                       type="button"
                       onClick={() => setGender(g)}
                       className={`flex-1 py-3 rounded-xl text-sm font-semibold border transition-all capitalize ${
-                        gender === g ? "bg-accent/10 border-accent/40 text-accent" : "bg-bg-3 border-border text-muted hover:text-gray-900"
+                        gender === g ? "bg-pink/10 border-pink/40 text-pink" : "bg-white/5 border-white/10 text-gray-400 hover:text-white"
                       }`}
                     >
                       {g === "male" ? "♂ Male" : "♀ Female"}
@@ -343,10 +347,10 @@ function TrainerApplyContent() {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">City</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">City</label>
                 <input
                   type="text" value={city} onChange={(e) => setCity(e.target.value)}
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-pink/40"
                 />
               </div>
             </div>
@@ -356,13 +360,13 @@ function TrainerApplyContent() {
             <button
               onClick={handleCreateAccount}
               disabled={loading}
-              className="w-full mt-6 py-3.5 rounded-xl font-bold text-sm bg-accent text-bg hover:bg-accent-dark transition-all disabled:opacity-50"
+              className="w-full mt-6 py-3.5 rounded-xl font-bold text-sm btn-gradient text-white hover:opacity-90 transition-all disabled:opacity-50"
             >
               {loading ? "Creating account..." : "Continue →"}
             </button>
 
-            <p className="text-muted text-xs text-center mt-4">
-              Already have an account? <Link href="/auth/login" className="text-accent hover:underline">Sign in</Link>
+            <p className="text-gray-400 text-xs text-center mt-4">
+              Already have an account? <Link href="/auth/login" className="text-pink hover:underline">Sign in</Link>
             </p>
           </div>
         )}
@@ -370,23 +374,23 @@ function TrainerApplyContent() {
         {/* Step 1: Profile */}
         {step === 1 && (
           <div>
-            <h1 className="font-serif text-3xl text-gray-900 mb-2">Your Trainer Profile</h1>
-            <p className="text-muted text-sm mb-8">Tell clients about yourself</p>
+            <h1 className="font-serif text-3xl text-white mb-2">Your Trainer Profile</h1>
+            <p className="text-gray-400 text-sm mb-8">Tell clients about yourself</p>
 
             <div className="space-y-6">
               {/* Photo Upload */}
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-3 block">Profile Photo</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">Profile Photo</label>
                 <div className="flex items-center gap-5">
-                  <div className="w-20 h-20 rounded-full bg-bg-3 border-2 border-dashed border-border flex items-center justify-center overflow-hidden">
+                  <div className="w-20 h-20 rounded-full bg-white/5 border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden">
                     {avatarPreview ? (
                       <img src={avatarPreview} alt="Preview" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-muted text-2xl">📷</span>
+                      <span className="text-gray-400 text-2xl">📷</span>
                     )}
                   </div>
                   <div>
-                    <label className="inline-block px-4 py-2 bg-bg-3 border border-border rounded-lg text-xs font-semibold text-gray-900 hover:border-accent/40 cursor-pointer transition-all">
+                    <label className="inline-block px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-semibold text-white hover:border-pink/40 cursor-pointer transition-all">
                       Upload photo
                       <input
                         type="file"
@@ -401,33 +405,33 @@ function TrainerApplyContent() {
                         }}
                       />
                     </label>
-                    <p className="text-muted text-[11px] mt-1.5">JPG or PNG, max 2MB</p>
+                    <p className="text-gray-400 text-[11px] mt-1.5">JPG or PNG, max 2MB</p>
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">Bio</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Bio</label>
                 <textarea
                   value={bio} onChange={(e) => setBio(e.target.value)}
                   placeholder="Tell potential clients about your training philosophy, approach, and what makes you different..."
                   rows={4}
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40 resize-none"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-pink/40 resize-none"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-1.5 block">Years of Experience</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Years of Experience</label>
                 <input
                   type="number" value={experienceYears} onChange={(e) => setExperienceYears(e.target.value)}
                   placeholder="e.g. 5"
                   min="0" max="50"
-                  className="w-full bg-bg-3 border border-border rounded-xl px-4 py-3 text-sm text-gray-900 placeholder:text-gray-900/25 focus:outline-none focus:border-accent/40"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-pink/40"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-3 block">Specializations</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">Specializations</label>
                 <div className="flex flex-wrap gap-2">
                   {SPECIALIZATIONS.map((spec) => (
                     <button
@@ -435,8 +439,8 @@ function TrainerApplyContent() {
                       onClick={() => setSelectedSpecs(toggleArray(selectedSpecs, spec))}
                       className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
                         selectedSpecs.includes(spec)
-                          ? "bg-accent text-bg"
-                          : "bg-bg-3 border border-border text-muted hover:border-accent/40"
+                          ? "btn-gradient text-white"
+                          : "bg-white/5 border border-white/10 text-gray-400 hover:border-pink/40"
                       }`}
                     >
                       {spec}
@@ -446,7 +450,7 @@ function TrainerApplyContent() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-3 block">Certifications</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">Certifications</label>
                 <div className="flex flex-wrap gap-2">
                   {CERTIFICATIONS.map((cert) => (
                     <button
@@ -457,8 +461,8 @@ function TrainerApplyContent() {
                       }}
                       className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
                         selectedCerts.includes(cert)
-                          ? "bg-accent text-bg"
-                          : "bg-bg-3 border border-border text-muted hover:border-accent/40"
+                          ? "btn-gradient text-white"
+                          : "bg-white/5 border border-white/10 text-gray-400 hover:border-pink/40"
                       }`}
                     >
                       {cert}
@@ -471,7 +475,7 @@ function TrainerApplyContent() {
                     value={otherCert}
                     onChange={(e) => setOtherCert(e.target.value)}
                     placeholder="Enter your certification name"
-                    className="mt-3 w-full px-4 py-2.5 rounded-lg bg-bg-3 border border-border text-sm text-gray-900 placeholder:text-muted focus:border-accent focus:outline-none transition-colors"
+                    className="mt-3 w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white placeholder:text-gray-400 focus:border-pink focus:outline-none transition-colors"
                   />
                 )}
               </div>
@@ -482,13 +486,13 @@ function TrainerApplyContent() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => { setError(""); setStep(0); }}
-                className="px-6 py-3.5 rounded-xl font-medium text-sm border border-border text-muted hover:text-gray-900 transition-all"
+                className="px-6 py-3.5 rounded-xl font-medium text-sm border border-white/10 text-gray-400 hover:text-white transition-all"
               >
                 ← Back
               </button>
               <button
                 onClick={handleSubmitProfile}
-                className="flex-1 py-3.5 rounded-xl font-bold text-sm bg-accent text-bg hover:bg-accent-dark transition-all"
+                className="flex-1 py-3.5 rounded-xl font-bold text-sm btn-gradient text-white hover:opacity-90 transition-all"
               >
                 Continue →
               </button>
@@ -499,13 +503,13 @@ function TrainerApplyContent() {
         {/* Step 2: Plan & Schedule */}
         {step === 2 && (
           <div>
-            <h1 className="font-serif text-3xl text-gray-900 mb-2">Plan & Schedule</h1>
-            <p className="text-muted text-sm mb-8">Choose your plan type and availability</p>
+            <h1 className="font-serif text-3xl text-white mb-2">Plan & Schedule</h1>
+            <p className="text-gray-400 text-sm mb-8">Choose your plan type and availability</p>
 
             <div className="space-y-8">
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-3 block">Plan Type</label>
-                <p className="text-muted text-xs mb-4">Select the plan you want to offer</p>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">Plan Type</label>
+                <p className="text-gray-400 text-xs mb-4">Select the plan you want to offer</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {PLAN_OPTIONS.map((plan) => {
                     const isEliteDisabled = plan.value === "elite" && selectedCerts.length === 0;
@@ -516,14 +520,14 @@ function TrainerApplyContent() {
                         disabled={isEliteDisabled}
                         className={`flex flex-col items-center gap-1.5 p-5 rounded-xl text-sm transition-all ${
                           isEliteDisabled
-                            ? "bg-card/50 border border-border/50 text-muted/50 cursor-not-allowed opacity-50"
+                            ? "bg-white/5 border border-white/5 text-gray-400/50 cursor-not-allowed opacity-50"
                             : planType === plan.value
-                            ? `ring-2 ${plan.color === "accent" ? "bg-accent/10 ring-accent text-accent" : plan.color === "orange" ? "bg-orange/10 ring-orange text-orange" : "bg-gold/10 ring-gold text-gold"}`
-                            : "bg-white shadow-sm border border-gray-100 text-gray-900 hover:border-border-2"
+                            ? `ring-2 ${plan.color === "accent" ? "bg-pink/10 ring-pink text-pink" : plan.color === "orange" ? "bg-orange/10 ring-orange text-orange" : "bg-gold/10 ring-gold text-gold"}`
+                            : "glass-card text-white hover:border-white/20"
                         }`}
                       >
                         <span className="font-bold">{plan.label}</span>
-                        <span className={`text-xs ${isEliteDisabled ? "text-muted/40" : planType === plan.value ? "opacity-70" : "text-muted"}`}>
+                        <span className={`text-xs ${isEliteDisabled ? "text-gray-400/40" : planType === plan.value ? "opacity-70" : "text-gray-400"}`}>
                           {isEliteDisabled ? "Requires certification" : plan.desc}
                         </span>
                       </button>
@@ -533,7 +537,7 @@ function TrainerApplyContent() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-3 block">Available Days</label>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">Available Days</label>
                 <div className="flex flex-wrap gap-2">
                   {DAYS.map((day) => (
                     <button
@@ -541,8 +545,8 @@ function TrainerApplyContent() {
                       onClick={() => setAvailableDays(toggleArray(availableDays, day.value))}
                       className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
                         availableDays.includes(day.value)
-                          ? "bg-accent text-bg"
-                          : "bg-bg-3 border border-border text-muted hover:border-accent/40"
+                          ? "btn-gradient text-white"
+                          : "bg-white/5 border border-white/10 text-gray-400 hover:border-pink/40"
                       }`}
                     >
                       {day.label}
@@ -552,8 +556,8 @@ function TrainerApplyContent() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-muted uppercase tracking-wider mb-3 block">Available Time Slots</label>
-                <p className="text-muted text-xs mb-4">Select all time windows you can train clients</p>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">Available Time Slots</label>
+                <p className="text-gray-400 text-xs mb-4">Select all time windows you can train clients</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {TIME_PREFERENCES.map((tp) => (
                     <button
@@ -561,12 +565,12 @@ function TrainerApplyContent() {
                       onClick={() => setAvailableTimes(toggleArray(availableTimes, tp.value))}
                       className={`flex flex-col items-center gap-1 px-5 py-4 rounded-xl text-sm font-medium transition-all ${
                         availableTimes.includes(tp.value)
-                          ? "bg-accent text-bg ring-2 ring-accent/40"
-                          : "bg-white shadow-sm border border-gray-100 text-gray-900 hover:border-accent/40"
+                          ? "btn-gradient text-white ring-2 ring-pink/40"
+                          : "glass-card text-white hover:border-pink/40"
                       }`}
                     >
                       <span className="font-bold text-base">{tp.label}</span>
-                      <span className={`text-xs ${availableTimes.includes(tp.value) ? "text-bg/70" : "text-muted"}`}>{tp.range}</span>
+                      <span className={`text-xs ${availableTimes.includes(tp.value) ? "text-white/70" : "text-gray-400"}`}>{tp.range}</span>
                     </button>
                   ))}
                 </div>
@@ -575,35 +579,35 @@ function TrainerApplyContent() {
               {/* Earnings Breakdown */}
               {planType && (
                 <div>
-                  <label className="text-xs font-bold text-muted uppercase tracking-wider mb-3 block">Your Earnings</label>
-                  <p className="text-muted text-xs mb-4">What you take home per client per month</p>
-                  <div className="bg-card border border-accent/20 rounded-2xl p-6">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 block">Your Earnings</label>
+                  <p className="text-gray-400 text-xs mb-4">What you take home per client per month</p>
+                  <div className="glass-card rounded-2xl p-6">
                     <div className="flex items-center justify-between mb-5">
-                      <span className="text-gray-900 font-semibold text-sm">
+                      <span className="text-white font-semibold text-sm">
                         {PLAN_OPTIONS.find(p => p.value === planType)?.label}
                       </span>
-                      <span className="text-muted text-xs">Client pays {PLAN_EARNINGS[planType].planPrice}/mo</span>
+                      <span className="text-gray-400 text-xs">Client pays {PLAN_EARNINGS[planType].planPrice}/mo</span>
                     </div>
                     <div className="space-y-3 mb-5">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted">{PLAN_EARNINGS[planType].sessions} sessions × ₹{PLAN_EARNINGS[planType].perSession}</span>
-                        <span className="text-gray-900 font-medium">{PLAN_EARNINGS[planType].trainerTotal}</span>
+                        <span className="text-gray-400">{PLAN_EARNINGS[planType].sessions} sessions × ₹{PLAN_EARNINGS[planType].perSession}</span>
+                        <span className="text-white font-medium">{PLAN_EARNINGS[planType].trainerTotal}</span>
                       </div>
                       {PLAN_EARNINGS[planType].extras?.map((extra, i) => (
                         <div key={i} className="flex items-center justify-between text-sm">
-                          <span className="text-muted">{extra.label}</span>
-                          <span className="text-gray-900 font-medium">{extra.amount}</span>
+                          <span className="text-gray-400">{extra.label}</span>
+                          <span className="text-white font-medium">{extra.amount}</span>
                         </div>
                       ))}
                     </div>
-                    <div className="border-t border-accent/20 pt-4 flex items-center justify-between">
-                      <span className="text-accent font-bold text-sm">You earn per client</span>
-                      <span className="text-accent font-serif text-2xl font-bold">
+                    <div className="border-t border-pink/20 pt-4 flex items-center justify-between">
+                      <span className="text-pink font-bold text-sm">You earn per client</span>
+                      <span className="text-pink font-serif text-2xl font-bold">
                         ₹{(PLAN_EARNINGS[planType].sessions * PLAN_EARNINGS[planType].perSession + (PLAN_EARNINGS[planType].extras?.reduce((sum, e) => sum + parseInt(e.amount.replace(/[₹,]/g, "")), 0) || 0)).toLocaleString("en-IN")}
                       </span>
                     </div>
-                    <p className="text-muted text-[11px] mt-4 leading-relaxed">
-                      💰 With 10 clients you earn <span className="text-gray-900 font-semibold">
+                    <p className="text-gray-400 text-[11px] mt-4 leading-relaxed">
+                      With 10 clients you earn <span className="text-white font-semibold">
                       ₹{((PLAN_EARNINGS[planType].sessions * PLAN_EARNINGS[planType].perSession + (PLAN_EARNINGS[planType].extras?.reduce((sum, e) => sum + parseInt(e.amount.replace(/[₹,]/g, "")), 0) || 0)) * 10).toLocaleString("en-IN")}
                       </span>/month. Payouts every 1st & 15th.
                     </p>
@@ -617,14 +621,14 @@ function TrainerApplyContent() {
             <div className="flex gap-3 mt-8">
               <button
                 onClick={() => { setError(""); setStep(1); }}
-                className="px-6 py-3.5 rounded-xl font-medium text-sm border border-border text-muted hover:text-gray-900 transition-all"
+                className="px-6 py-3.5 rounded-xl font-medium text-sm border border-white/10 text-gray-400 hover:text-white transition-all"
               >
                 ← Back
               </button>
               <button
                 onClick={handleSubmitApplication}
                 disabled={loading}
-                className="flex-1 py-3.5 rounded-xl font-bold text-sm bg-accent text-bg hover:bg-accent-dark transition-all disabled:opacity-50"
+                className="flex-1 py-3.5 rounded-xl font-bold text-sm btn-gradient text-white hover:opacity-90 transition-all disabled:opacity-50"
               >
                 {loading ? "Submitting..." : "Submit Application"}
               </button>
@@ -635,31 +639,31 @@ function TrainerApplyContent() {
         {/* Step 3: Success */}
         {step === 3 && (
           <div className="text-center py-16">
-            <div className="w-20 h-20 rounded-full bg-accent/10 flex items-center justify-center text-4xl mx-auto mb-6">
+            <div className="w-20 h-20 rounded-full bg-pink/10 flex items-center justify-center text-4xl mx-auto mb-6">
               ✓
             </div>
-            <h1 className="font-serif text-3xl text-gray-900 mb-3">Application Submitted!</h1>
-            <p className="text-muted text-[15px] leading-relaxed max-w-md mx-auto mb-8">
+            <h1 className="font-serif text-3xl text-white mb-3">Application Submitted!</h1>
+            <p className="text-gray-400 text-[15px] leading-relaxed max-w-md mx-auto mb-8">
               Thank you for applying to join Onlifit as a trainer. Our team will review your profile and get back to you within 24–48 hours.
             </p>
-            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl p-6 max-w-sm mx-auto mb-8 text-left">
-              <h3 className="text-gray-900 font-semibold text-sm mb-3">What happens next?</h3>
+            <div className="glass-card rounded-2xl p-6 max-w-sm mx-auto mb-8 text-left">
+              <h3 className="text-white font-semibold text-sm mb-3">What happens next?</h3>
               <ol className="space-y-2.5">
-                <li className="flex items-start gap-2.5 text-sm text-muted">
-                  <span className="text-accent font-bold">1.</span>
+                <li className="flex items-start gap-2.5 text-sm text-gray-400">
+                  <span className="text-pink font-bold">1.</span>
                   Our team reviews your profile & certifications
                 </li>
-                <li className="flex items-start gap-2.5 text-sm text-muted">
-                  <span className="text-accent font-bold">2.</span>
+                <li className="flex items-start gap-2.5 text-sm text-gray-400">
+                  <span className="text-pink font-bold">2.</span>
                   You receive an approval email with your Onlifit ID
                 </li>
-                <li className="flex items-start gap-2.5 text-sm text-muted">
-                  <span className="text-accent font-bold">3.</span>
+                <li className="flex items-start gap-2.5 text-sm text-gray-400">
+                  <span className="text-pink font-bold">3.</span>
                   Your profile goes live and clients can book you
                 </li>
               </ol>
             </div>
-            <Link href="/" className="text-accent font-semibold text-sm hover:underline">
+            <Link href="/" className="text-pink font-semibold text-sm hover:underline">
               ← Back to home
             </Link>
           </div>
@@ -671,7 +675,7 @@ function TrainerApplyContent() {
 
 export default function TrainerApplyPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-accent border-t-transparent rounded-full" /></div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-bg"><div className="animate-spin w-8 h-8 border-2 border-pink border-t-transparent rounded-full" /></div>}>
       <TrainerApplyContent />
     </Suspense>
   );

@@ -226,6 +226,11 @@ export default function DashboardPage() {
                 Admin
               </Link>
             )}
+            {profile?.role === "trainer" && (
+              <Link href="/trainer/dashboard" className="text-xs font-bold text-bg bg-accent px-3 py-1.5 rounded-md hover:bg-accent-dark transition-all">
+                Trainer Dashboard
+              </Link>
+            )}
             <Link href="/trainers" className="text-sm text-muted hover:text-white transition-colors">
               Trainers
             </Link>

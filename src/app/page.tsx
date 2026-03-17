@@ -45,9 +45,9 @@ export default function HomePage() {
           <Link href="/auth/login" className="px-5 py-2.5 border border-border-2 rounded-md text-sm font-semibold text-white/85 hover:border-white/30 hover:text-white transition-all">
             Sign in
           </Link>
-          <Link href="/auth/signup" className="px-5 py-2.5 bg-accent rounded-md text-sm font-bold text-bg hover:bg-accent-dark transition-all">
+          <a href="#how" className="px-5 py-2.5 bg-accent rounded-md text-sm font-bold text-bg hover:bg-accent-dark transition-all">
             Get started
-          </Link>
+          </a>
         </div>
       </nav>
 
@@ -79,9 +79,9 @@ export default function HomePage() {
           </p>
 
           <div className="flex gap-3.5 justify-center flex-wrap mb-14">
-            <Link href="/auth/signup" className="px-8 py-3.5 bg-accent rounded-lg text-[15px] font-bold text-bg hover:bg-accent-dark transition-all hover:-translate-y-0.5">
+            <a href="#how" className="px-8 py-3.5 bg-accent rounded-lg text-[15px] font-bold text-bg hover:bg-accent-dark transition-all hover:-translate-y-0.5">
               Get started
-            </Link>
+            </a>
             <a href="#plans" className="px-8 py-3.5 border border-border-2 rounded-lg text-[15px] font-semibold text-white/85 hover:border-white/30 transition-all">
               View plans
             </a>

@@ -29,12 +29,32 @@ function LoginContent() {
     setError("");
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setError(error.message);
       setLoading(false);
       return;
+    }
+
+    // Check user role to redirect appropriately
+    if (data.user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+
+      if (profile?.role === "trainer") {
+        router.push("/trainer/dashboard");
+        router.refresh();
+        return;
+      }
+      if (profile?.role === "admin") {
+        router.push("/admin");
+        router.refresh();
+        return;
+      }
     }
 
     const redirectTo = searchParams.get("redirect") || "/dashboard";

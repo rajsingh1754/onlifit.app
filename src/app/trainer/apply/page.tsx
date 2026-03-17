@@ -112,39 +112,43 @@ function TrainerApplyContent() {
     setLoading(true);
     setError("");
 
-    const { data, error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: fullName } },
-    });
-
-    if (authError) {
-      setError(authError.message);
-      setLoading(false);
-      return;
-    }
-
-    if (data.user) {
-      setUserId(data.user.id);
-      await supabase.from("profiles").upsert({
-        id: data.user.id,
+    try {
+      const { data, error: authError } = await supabase.auth.signUp({
         email,
-        full_name: fullName,
-        phone,
-        city,
-        role: "trainer",
+        password,
+        options: { data: { full_name: fullName } },
       });
 
-      // Auto sign-in to establish session
-      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-      if (signInError) {
-        // If email confirmation is required, signIn will fail — but we have the userId stored
-        console.log("Auto sign-in note:", signInError.message);
+      if (authError) {
+        setError(authError.message);
+        setLoading(false);
+        return;
       }
-    }
 
-    setLoading(false);
-    setStep(1);
+      if (data.user) {
+        setUserId(data.user.id);
+        await supabase.from("profiles").upsert({
+          id: data.user.id,
+          email,
+          full_name: fullName,
+          phone,
+          city,
+          role: "trainer",
+        });
+
+        // Auto sign-in to establish session
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) {
+          console.log("Auto sign-in note:", signInError.message);
+        }
+      }
+
+      setLoading(false);
+      setStep(1);
+    } catch (err) {
+      setError("Network error — please check your internet connection and try again.");
+      setLoading(false);
+    }
   }
 
   async function handleSubmitProfile() {

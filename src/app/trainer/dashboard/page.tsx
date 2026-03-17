@@ -207,6 +207,13 @@ export default function TrainerDashboard() {
 
       const { data: trainerData } = await supabase.from("trainers").select("*").eq("profile_id", user.id).single();
       if (!trainerData) { setLoading(false); return; }
+
+      // Redirect to pending page if not approved
+      if (!trainerData.is_available) {
+        window.location.href = "/trainer/pending";
+        return;
+      }
+
       setTrainer(trainerData);
 
       const [bookingsRes, reviewsRes, slotsRes] = await Promise.all([

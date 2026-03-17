@@ -46,7 +46,18 @@ function LoginContent() {
         .single();
 
       if (profile?.role === "trainer") {
-        router.push("/trainer/dashboard");
+        // Check if trainer is approved
+        const { data: trainer } = await supabase
+          .from("trainers")
+          .select("is_available")
+          .eq("profile_id", data.user.id)
+          .single();
+
+        if (trainer?.is_available) {
+          router.push("/trainer/dashboard");
+        } else {
+          router.push("/trainer/pending");
+        }
         router.refresh();
         return;
       }

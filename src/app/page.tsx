@@ -77,11 +77,10 @@ export default function HomePage() {
       </nav>
 
       {/* ════════════ HERO ════════════ */}
-      <section className="min-h-screen flex items-center px-[5%] pt-[100px] pb-20 relative overflow-hidden">
+      <section className="min-h-screen flex items-center px-[5%] pt-[100px] pb-20 relative overflow-hidden bg-black">
         {/* Decorative blur circles */}
-        <div className="blur-circle pink w-[500px] h-[500px] -top-20 -right-40 animate-glow-pulse" />
-        <div className="blur-circle yellow w-[400px] h-[400px] top-1/2 -left-40 animate-glow-pulse" style={{ animationDelay: "2s" }} />
-        <div className="blur-circle blue w-[300px] h-[300px] bottom-20 right-1/4 animate-glow-pulse" style={{ animationDelay: "1s" }} />
+        <div className="blur-circle pink w-[500px] h-[500px] -top-20 -right-40 animate-glow-pulse opacity-50" />
+        <div className="blur-circle blue w-[300px] h-[300px] bottom-20 right-1/4 animate-glow-pulse opacity-50" style={{ animationDelay: "1s" }} />
 
         <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center relative z-10">
           {/* Left */}

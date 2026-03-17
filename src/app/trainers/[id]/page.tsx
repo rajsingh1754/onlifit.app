@@ -14,12 +14,6 @@ const PLAN_LABEL: Record<string, string> = {
   elite: "Onlifit Elite",
 };
 
-const TIME_PREFERENCES = [
-  { label: "Morning", range: "6 AM – 10 AM", value: "morning" },
-  { label: "Afternoon", range: "12 PM – 4 PM", value: "afternoon" },
-  { label: "Evening", range: "5 PM – 9 PM", value: "evening" },
-];
-
 const DURATION_OPTIONS = [
   { months: 1, label: "1 Month" },
   { months: 3, label: "3 Months" },
@@ -27,13 +21,37 @@ const DURATION_OPTIONS = [
   { months: 12, label: "12 Months" },
 ];
 
+interface SlotData {
+  id: string;
+  day: string;
+  time: string;
+  is_available: boolean;
+}
+
+interface BookedSlot {
+  booked_slot: string;
+}
+
+const DAYS_ORDER = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+
+function formatTime(t: string) {
+  const [h] = t.split(":");
+  const hr = parseInt(h);
+  if (hr === 0) return "12 AM";
+  if (hr < 12) return `${hr} AM`;
+  if (hr === 12) return "12 PM";
+  return `${hr - 12} PM`;
+}
+
 export default function TrainerDetailPage() {
   const { id } = useParams();
   const router = useRouter();
   const [trainer, setTrainer] = useState<Trainer | null>(null);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [slots, setSlots] = useState<SlotData[]>([]);
+  const [bookedSlots, setBookedSlots] = useState<Set<string>>(new Set());
+  const [selectedSlot, setSelectedSlot] = useState<string>("");
   const [selectedDuration, setSelectedDuration] = useState<number>(1);
   const [loading, setLoading] = useState(true);
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -49,15 +67,36 @@ export default function TrainerDetailPage() {
   }, [id]);
 
   async function fetchData() {
-    const [trainerRes, plansRes, reviewsRes] = await Promise.all([
+    const [trainerRes, plansRes, reviewsRes, slotsRes] = await Promise.all([
       supabase.from("trainer_profiles").select("*").eq("id", id).single(),
       supabase.from("plans").select("*").order("price"),
       supabase.from("reviews").select("*, profile:profiles(full_name, avatar_url)").eq("trainer_id", id).order("created_at", { ascending: false }).limit(10),
+      supabase.from("trainer_slots").select("*").eq("trainer_id", id).eq("is_available", true).order("time"),
     ]);
 
     setTrainer(trainerRes.data);
     setPlans(plansRes.data || []);
     setReviews(reviewsRes.data || []);
+    setSlots(slotsRes.data || []);
+
+    // Fetch currently booked slots for this trainer (active/confirmed/pending bookings)
+    try {
+      const { data: bookedData } = await supabase
+        .from("bookings")
+        .select("booked_slot")
+        .eq("trainer_id", id)
+        .in("status", ["active", "confirmed", "pending"])
+        .not("booked_slot", "is", null);
+      
+      const taken = new Set<string>();
+      (bookedData || []).forEach((b: BookedSlot) => {
+        if (b.booked_slot) taken.add(b.booked_slot);
+      });
+      setBookedSlots(taken);
+    } catch {
+      // Column may not exist yet
+    }
+
     setLoading(false);
   }
 
@@ -102,12 +141,12 @@ export default function TrainerDetailPage() {
   }
 
   function handleBook(planId: string) {
-    if (!selectedTime) {
-      alert("Please select a time preference");
+    if (!selectedSlot) {
+      alert("Please select an available time slot");
       return;
     }
     supabase.auth.getUser().then(({ data: { user } }) => {
-      const params = `trainer=${trainer!.id}&plan=${planId}&duration=${selectedDuration}&time=${selectedTime}`;
+      const params = `trainer=${trainer!.id}&plan=${planId}&duration=${selectedDuration}&slot=${encodeURIComponent(selectedSlot)}`;
       if (user) {
         router.push(`/booking?${params}`);
       } else {
@@ -201,26 +240,60 @@ export default function TrainerDetailPage() {
           </div>
         </div>
 
-        {/* Time Preference */}
+        {/* Available Time Slots */}
         <div className="mb-10">
-          <h2 className="font-serif text-2xl text-white mb-2">Preferred Time</h2>
-          <p className="text-muted text-sm mb-5">Choose a time window that suits your schedule</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {TIME_PREFERENCES.map((tp) => (
-              <button
-                key={tp.value}
-                onClick={() => setSelectedTime(selectedTime === tp.value ? "" : tp.value)}
-                className={`flex flex-col items-center gap-1 px-5 py-4 rounded-xl text-sm font-medium transition-all ${
-                  selectedTime === tp.value
-                    ? "bg-accent text-bg ring-2 ring-accent/40"
-                    : "bg-card border border-border text-white hover:border-accent/40"
-                }`}
-              >
-                <span className="font-bold text-base">{tp.label}</span>
-                <span className={`text-xs ${selectedTime === tp.value ? "text-bg/70" : "text-muted"}`}>{tp.range}</span>
-              </button>
-            ))}
-          </div>
+          <h2 className="font-serif text-2xl text-white mb-2">Available Slots</h2>
+          <p className="text-muted text-sm mb-5">Pick an hourly slot — booked slots are shown in red</p>
+          
+          {slots.length === 0 ? (
+            <div className="bg-card border border-border rounded-2xl p-8 text-center">
+              <p className="text-muted text-sm">This trainer hasn&apos;t set their availability yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {DAYS_ORDER.map((day) => {
+                const daySlots = slots.filter((s) => s.day === day);
+                if (daySlots.length === 0) return null;
+                return (
+                  <div key={day} className="bg-card border border-border rounded-xl p-4">
+                    <h4 className="text-sm font-bold text-white mb-3 capitalize">{day}</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {daySlots.map((s) => {
+                        const slotKey = `${s.day}:${s.time}`;
+                        const isBooked = bookedSlots.has(slotKey);
+                        const isSelected = selectedSlot === slotKey;
+                        return (
+                          <button
+                            key={s.id}
+                            disabled={isBooked}
+                            onClick={() => setSelectedSlot(isSelected ? "" : slotKey)}
+                            className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all ${
+                              isBooked
+                                ? "bg-red-500/10 text-red-400 border border-red-500/20 cursor-not-allowed line-through"
+                                : isSelected
+                                  ? "bg-accent text-bg ring-2 ring-accent/40"
+                                  : "bg-bg-3 border border-border text-white hover:border-accent/40"
+                            }`}
+                          >
+                            {formatTime(s.time)}
+                            {isBooked && " ✕"}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {selectedSlot && (
+            <div className="mt-4 p-3 bg-accent/10 border border-accent/20 rounded-xl">
+              <p className="text-sm text-accent font-semibold">
+                ✓ Selected: <span className="capitalize">{selectedSlot.split(":")[0]}</span> at {formatTime(selectedSlot.split(":").slice(1).join(":"))}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Duration */}
@@ -285,7 +358,7 @@ export default function TrainerDetailPage() {
                     onClick={() => handleBook(plan.id)}
                     className="w-full mt-5 py-3 rounded-lg font-bold text-sm transition-all bg-accent text-bg hover:bg-accent-dark"
                   >
-                    Book Trainer{selectedTime ? "" : " – Select time first"}
+                    Book Trainer{selectedSlot ? "" : " – Select slot first"}
                   </button>
                 </div>
               );

@@ -57,6 +57,7 @@ interface DashboardBooking {
   start_date: string;
   duration_months: number;
   time_preference: string;
+  booked_slot: string;
   created_at: string;
   trainer: {
     id: string;
@@ -137,6 +138,17 @@ function getEndDate(startDate: string, months: number) {
   const d = new Date(startDate);
   d.setMonth(d.getMonth() + months);
   return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+}
+
+function formatSlotLabel(slot: string) {
+  if (!slot) return "";
+  const parts = slot.split(":");
+  const day = parts[0];
+  const time = parts.slice(1).join(":");
+  const [h] = time.split(":");
+  const hr = parseInt(h);
+  const timeStr = hr === 0 ? "12 AM" : hr < 12 ? `${hr} AM` : hr === 12 ? "12 PM" : `${hr - 12} PM`;
+  return `${day.charAt(0).toUpperCase() + day.slice(1)} ${timeStr}`;
 }
 
 function getDaysRemaining(startDate: string, months: number) {
@@ -313,7 +325,11 @@ export default function DashboardPage() {
                         {PLAN_LABEL[nextBooking.trainer?.plan_types?.[0] || "virtual"]}
                       </span>
                       <span className="text-muted text-xs">
-                        {TIME_LABELS[nextBooking.time_preference]?.icon} {TIME_LABELS[nextBooking.time_preference]?.label || "—"}
+                        {nextBooking.booked_slot
+                          ? `🕐 ${formatSlotLabel(nextBooking.booked_slot)}`
+                          : TIME_LABELS[nextBooking.time_preference]
+                            ? `${TIME_LABELS[nextBooking.time_preference].icon} ${TIME_LABELS[nextBooking.time_preference].label}`
+                            : "—"}
                       </span>
                     </div>
                     <p className="text-muted text-xs mt-1.5">
@@ -473,7 +489,11 @@ export default function DashboardPage() {
                         </span>
                       </div>
                       <p className="text-muted text-xs mb-3">
-                        {plan?.sessions_per_month} sessions/mo · {booking.duration_months || 1}mo · {TIME_LABELS[booking.time_preference]?.icon} {TIME_LABELS[booking.time_preference]?.label || "—"}
+                        {plan?.sessions_per_month} sessions/mo · {booking.duration_months || 1}mo · {booking.booked_slot
+                          ? `🕐 ${formatSlotLabel(booking.booked_slot)}`
+                          : TIME_LABELS[booking.time_preference]
+                            ? `${TIME_LABELS[booking.time_preference].icon} ${TIME_LABELS[booking.time_preference].label}`
+                            : "—"}
                       </p>
 
                       {/* Meta pills */}

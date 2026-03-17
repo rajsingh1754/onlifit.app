@@ -22,7 +22,7 @@ function BookingPage() {
   const trainerId = searchParams.get("trainer");
   const planId = searchParams.get("plan");
   const duration = parseInt(searchParams.get("duration") || "1");
-  const timePreference = searchParams.get("time") || "";
+  const bookedSlot = searchParams.get("slot") || "";
 
   const [trainer, setTrainer] = useState<Trainer | null>(null);
   const [plan, setPlan] = useState<Plan | null>(null);
@@ -32,11 +32,16 @@ function BookingPage() {
   const [startDate, setStartDate] = useState("");
   const supabase = createClient();
 
-  const TIME_LABELS: Record<string, string> = {
-    morning: "Morning (6 AM – 10 AM)",
-    afternoon: "Afternoon (12 PM – 4 PM)",
-    evening: "Evening (5 PM – 9 PM)",
-  };
+  function formatSlotLabel(slot: string) {
+    if (!slot) return "";
+    const parts = slot.split(":");
+    const day = parts[0];
+    const time = parts.slice(1).join(":");
+    const [h] = time.split(":");
+    const hr = parseInt(h);
+    const timeStr = hr === 0 ? "12 AM" : hr < 12 ? `${hr} AM` : hr === 12 ? "12 PM" : `${hr - 12} PM`;
+    return `${day.charAt(0).toUpperCase() + day.slice(1)} at ${timeStr}`;
+  }
 
   useEffect(() => {
     if (trainerId && planId) fetchData();
@@ -68,7 +73,7 @@ function BookingPage() {
       plan_id: planId,
       start_date: startDate,
       duration_months: duration,
-      time_preference: timePreference,
+      booked_slot: bookedSlot,
       status: "pending",
     });
 
@@ -173,7 +178,7 @@ function BookingPage() {
           <div className="grid grid-cols-2 gap-3 mb-4 pt-4 border-t border-border">
             <div className="bg-bg-3 rounded-xl p-3">
               <p className="text-[11px] text-muted uppercase tracking-wider mb-1">Time Slot</p>
-              <p className="text-white text-sm font-semibold">{TIME_LABELS[timePreference] || timePreference}</p>
+              <p className="text-white text-sm font-semibold">{formatSlotLabel(bookedSlot)}</p>
             </div>
             <div className="bg-bg-3 rounded-xl p-3">
               <p className="text-[11px] text-muted uppercase tracking-wider mb-1">Duration</p>

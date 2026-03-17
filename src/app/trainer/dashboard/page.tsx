@@ -46,11 +46,6 @@ const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string }> =
   cancelled: { bg: "bg-red-500/10", text: "text-red-400", dot: "bg-red-400" },
 };
 
-const PLAN_PRICE: Record<string, number> = {
-  offline: 5999,
-  virtual: 7999,
-  elite: 14999,
-};
 const TRAINER_EARNING: Record<string, number> = {
   offline: 5100,
   virtual: 6000,
@@ -87,6 +82,7 @@ interface ClientBooking {
   start_date: string;
   duration_months: number;
   time_preference: string;
+  booked_slot: string;
   created_at: string;
   profile: { full_name: string; avatar_url: string | null; email: string; phone: string };
   plan: { name: string; slug: string; price: number; sessions_per_month: number };
@@ -123,6 +119,17 @@ function AnimatedNumber({ value, prefix = "", suffix = "" }: { value: number; pr
     requestAnimationFrame(step);
   }, [value]);
   return <span>{prefix}{display.toLocaleString("en-IN")}{suffix}</span>;
+}
+
+function formatSlotLabel(slot: string) {
+  if (!slot) return "";
+  const parts = slot.split(":");
+  const day = parts[0];
+  const time = parts.slice(1).join(":");
+  const [h] = time.split(":");
+  const hr = parseInt(h);
+  const timeStr = hr === 0 ? "12 AM" : hr < 12 ? `${hr} AM` : hr === 12 ? "12 PM" : `${hr - 12} PM`;
+  return `${day.charAt(0).toUpperCase() + day.slice(1)} ${timeStr}`;
 }
 
 /* ─── Progress Ring ─── */
@@ -234,7 +241,6 @@ export default function TrainerDashboard() {
 
   /* ─── Computed data ─── */
   const activeBookings = bookings.filter((b) => ["active", "confirmed", "pending"].includes(b.status));
-  const completedBookings = bookings.filter((b) => b.status === "completed");
   const planType = trainer?.plan_types?.[0] || "offline";
 
   const totalEarnings = bookings
@@ -454,7 +460,7 @@ export default function TrainerDashboard() {
                             <div>
                               <p className="text-sm font-semibold text-white">{b.profile.full_name}</p>
                               <p className="text-xs text-muted">
-                                {b.duration_months}mo · {TIME_LABELS[b.time_preference]?.label || b.time_preference}
+                                {b.duration_months}mo · {b.booked_slot ? `🕐 ${formatSlotLabel(b.booked_slot)}` : TIME_LABELS[b.time_preference]?.label || b.time_preference}
                               </p>
                             </div>
                           </div>
@@ -553,7 +559,7 @@ export default function TrainerDashboard() {
                         <div>
                           <p className="text-[10px] text-muted uppercase tracking-wider">Time</p>
                           <p className="text-sm font-semibold text-white">
-                            {TIME_LABELS[b.time_preference]?.icon} {TIME_LABELS[b.time_preference]?.label || b.time_preference}
+                            {b.booked_slot ? `🕐 ${formatSlotLabel(b.booked_slot)}` : TIME_LABELS[b.time_preference]?.label || b.time_preference}
                           </p>
                         </div>
                         <div>
@@ -709,7 +715,7 @@ export default function TrainerDashboard() {
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-xs text-muted">
-                          {TIME_LABELS[b.time_preference]?.icon} {TIME_LABELS[b.time_preference]?.label || b.time_preference}
+                          {b.booked_slot ? `🕐 ${formatSlotLabel(b.booked_slot)}` : TIME_LABELS[b.time_preference]?.label || b.time_preference}
                         </span>
                         <span className="text-xs text-muted">
                           Until {b.start_date ? getEndDate(b.start_date, b.duration_months) : "TBD"}

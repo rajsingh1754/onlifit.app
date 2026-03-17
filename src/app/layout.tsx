@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 
-const SupportChat = dynamic(() => import("@/components/SupportChat"), { ssr: false });
+export const dynamic = "force-dynamic";
+
+const SupportChat = nextDynamic(() => import("@/components/SupportChat"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "Onlifit — Real Training. Real Results.",
